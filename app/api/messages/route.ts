@@ -14,7 +14,8 @@ export async function POST(request: Request) {
     // Focus on slurs and highly offensive terms, censoring them into ****
     const forbiddenWords = [
       'nigger', 'nigga', // N-word variations
-      'faggot', 'chink', 'paki', 'kike', 'coon', 'gook', 'spic', 'wetback', 'tranny'
+      'faggot', 'chink', 'paki', 'kike', 'coon', 'gook', 'spic', 'wetback', 'tranny',
+      'slut', 'whore' // Added as requested
     ];
     let moderatedContent = content; // Start with original content
 
