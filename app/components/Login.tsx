@@ -48,7 +48,7 @@ const Login = () => {
               required
               placeholder="Enter your password"
             />
-          </Form.Grop>
+          </Form.Group>
           <Button variant="primary" className="w-100 mt-4" type="submit">
             Login
           </Button>
