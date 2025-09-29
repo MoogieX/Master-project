@@ -3,6 +3,7 @@
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
+import ThemeToggle from './components/ThemeToggle'; // Import ThemeToggle
 
 export default function Home() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -23,11 +24,12 @@ export default function Home() {
               <Nav.Link href="#projects">Projects</Nav.Link>
               <Nav.Link href="#messaging">Messaging</Nav.Link>
             </Nav>
-            <Nav>
-              <Navbar.Text className="me-3">
+            <Nav className="d-flex align-items-center"> {/* Added d-flex and align-items-center for alignment */}
+              <Navbar.Text className="me-3 mb-0"> {/* Added mb-0 to remove bottom margin */}
                 Signed in as: <strong>{user?.username}</strong>
               </Navbar.Text>
               <Nav.Link onClick={logout}>Logout</Nav.Link>
+              <ThemeToggle /> {/* Added ThemeToggle component */}
             </Nav>
           </Navbar.Collapse>
         </Container>

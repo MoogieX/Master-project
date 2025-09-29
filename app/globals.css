@@ -1,7 +1,48 @@
 /* Import Bootstrap CSS */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-/* You can add your global styles here */
+/* Global CSS Variables for Theming */
+:root {
+  --background-color: #ffffff;
+  --text-color: #212529;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --card-bg: #ffffff;
+  --card-text: #212529;
+  --navbar-bg: #343a40;
+  --navbar-text: #ffffff;
+}
+
+[data-theme='dark'] {
+  --background-color: #212529;
+  --text-color: #f8f9fa;
+  --primary-color: #00aaff;
+  --secondary-color: #adb5bd;
+  --card-bg: #343a40;
+  --card-text: #f8f9fa;
+  --navbar-bg: #212529;
+  --navbar-text: #f8f9fa;
+}
+
+/* Apply global styles */
 body {
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding-top: 56px; /* Adjust for fixed navbar if used */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Adjust Bootstrap components to use CSS variables */
+.card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border-color: var(--secondary-color);
+}
+
+.navbar {
+  background-color: var(--navbar-bg) !important;
+}
+
+.navbar-brand, .nav-link, .navbar-text {
+  color: var(--navbar-text) !important;
 }
