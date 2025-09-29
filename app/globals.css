@@ -1,67 +1,251 @@
-/* Import Bootstrap CSS */
+/*
+  NEW GLOBALS.CSS
+  Description: A complete overhaul of the site's styling to create a clean,
+  modern, dark-themed aesthetic inspired by Discord.
+*/
+
+/* Import Bootstrap CSS (still useful for grid system) */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-/* Global CSS Variables for Theming */
+/* --- CSS Variables for Theming --- */
 :root {
-  --background-color: #ffffff;
-  --text-color: #212529;
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --card-bg: #ffffff;
-  --card-text: #212529;
-  --navbar-bg: #343a40;
-  --navbar-text: #ffffff;
+  /* Base Colors (Dark Theme) */
+  --background-primary: #36393f; /* Main background */
+  --background-secondary: #2f3136; /* Content background (e.g., chat) */
+  --background-tertiary: #202225; /* Sidebar, modals */
+  --background-accent: #40444b; /* Hover, active elements */
+  --background-floating: #18191c; /* Tooltips, dropdowns */
+
+  /* Text Colors */
+  --text-primary: #ffffff; /* Main text */
+  --text-secondary: #b9bbbe; /* Muted text, placeholders */
+  --text-link: #00a8fc; /* Links */
+  --text-positive: #43b581; /* Success states */
+  --text-warning: #faa61a; /* Warning states */
+  --text-danger: #f04747; /* Error states */
+
+  /* Interactive Elements */
+  --button-background: transparent;
+  --button-border-color: rgba(255, 255, 255, 0.2);
+  --button-hover-background: rgba(255, 255, 255, 0.05);
+  --button-active-background: rgba(255, 255, 255, 0.1);
+  --input-background: #40444b;
+  --input-border-color: #202225;
+
+  /* Scrollbars */
+  --scrollbar-thumb: #202225;
+  --scrollbar-track: #2f3136;
+
+  /* Font */
+  --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-[data-theme='dark'] {
-  --background-color: #212529;
-  --text-color: #f8f9fa;
-  --primary-color: #00aaff;
-  --secondary-color: #adb5bd;
-  --card-bg: #343a40;
-  --card-text: #f8f9fa;
-  --navbar-bg: #212529;
-  --navbar-text: #f8f9fa;
-  --btn-primary-bg: #0056b3; /* Darker blue for primary buttons in dark mode */
-  --btn-primary-color: #ffffff;
-  --btn-primary-border: #0056b3;
-}
-
-/* Apply global styles */
+/* --- Global Styles --- */
 html, body {
-  height: 100%; /* Ensure html and body take full height */
+  height: 100%;
   margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--background-primary);
+  color: var(--text-primary);
 }
 
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  padding-top: 56px; /* Adjust for fixed navbar if used */
-  transition: background-color 0.3s ease, color 0.3s ease;
-  /* Add a subtle background image or gradient for aesthetics */
-  background-image: url('/background.jpg'); /* Placeholder background image */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Keeps background fixed during scroll */
+/* --- Scrollbar Styling --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
 }
 
-/* Adjust Bootstrap components to use CSS variables */
-.card {
-  background-color: var(--card-bg);
-  color: var(--card-text);
-  border-color: var(--secondary-color);
+/* --- Component Overrides --- */
+
+/* Buttons */
+.btn {
+  background-color: var(--button-background) !important;
+  border: 1px solid var(--button-border-color) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.15s ease-in-out;
+  box-shadow: none !important; /* Remove bootstrap shadows */
+}
+
+.btn:hover {
+  background-color: var(--button-hover-background) !important;
+}
+
+.btn:active, .btn:focus {
+  background-color: var(--button-active-background) !important;
 }
 
 .btn-primary {
-  background-color: var(--btn-primary-bg, var(--primary-color));
-  color: var(--btn-primary-color, #ffffff);
-  border-color: var(--btn-primary-border, var(--primary-color));
+  border-color: var(--text-link) !important;
+  color: var(--text-link) !important;
+}
+.btn-primary:hover {
+  background-color: rgba(0, 168, 252, 0.1) !important;
 }
 
-.navbar {
-  background-color: var(--navbar-bg) !important;
+/* Forms & Inputs */
+.form-control {
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border-color);
+  color: var(--text-primary);
 }
 
-.navbar-brand, .nav-link, .navbar-text {
-  color: var(--navbar-text) !important;
+.form-control:focus {
+  background-color: var(--input-background);
+  border-color: var(--text-link);
+  box-shadow: 0 0 0 1px var(--text-link);
+  color: var(--text-primary);
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Cards (used for Login) */
+.card {
+  background-color: var(--background-secondary);
+  border: none;
+  border-radius: 8px;
+}
+
+/* --- Login Screen --- */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  width: 480px;
+  padding: 40px;
+  background-color: var(--background-tertiary);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+}
+
+.login-card h2 {
+  font-weight: 600;
+}
+
+/* --- Messaging Layout --- */
+.messaging-container {
+  display: flex;
+  height: calc(100vh - 56px); /* Adjust for navbar */
+}
+
+.channels-column {
+  width: 72px;
+  background-color: var(--background-tertiary);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.users-column {
+  width: 240px;
+  background-color: var(--background-secondary);
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-column {
+  flex-grow: 1;
+  background-color: var(--background-primary);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* --- Messaging Components --- */
+
+/* User List */
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.user-list-item:hover {
+  background-color: var(--background-accent);
+  color: var(--text-primary);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 12px;
+  background-color: var(--background-accent); /* Placeholder */
+}
+
+/* Chat Area */
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.message-group {
+  margin-bottom: 16px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+}
+
+.message .message-content {
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.message .username {
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.message .timestamp {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+/* Chat Input */
+.chat-input-form {
+  padding: 20px;
+}
+
+.chat-input {
+  background-color: var(--input-background);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.chat-input::placeholder {
+  color: var(--text-secondary);
 }

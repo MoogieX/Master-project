@@ -1,42 +1,45 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Card, Form, Button, ListGroup, InputGroup, Modal } from 'react-bootstrap'; // Import Modal
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import UserDisplayProfile from './UserDisplayProfile'; // Import UserDisplayProfile
+import UserDisplayProfile from './UserDisplayProfile';
+import { Modal } from 'react-bootstrap';
 
-// Define the shape of a message for the frontend
+// Define the shape of a message
 interface Message {
   _id: string;
   senderId: string;
-  // recipientId: string; // Removed for public forum
   content: string;
-  timestamp: string; // ISO date string
-  read: boolean;
+  timestamp: string;
+}
+
+// Define the shape of a user
+interface ChatUser {
+  _id: string;
+  username: string;
+  profilePictureUrl?: string;
 }
 
 const Messaging = () => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [allUsers, setAllUsers] = useState<any[]>([]); // State to store all users
-  const [userMap, setUserMap] = useState<Map<string, string>>(new Map()); // Map userId to username
-  const [showUserProfileModal, setShowUserProfileModal] = useState(false); // State to control modal visibility
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null); // State to store selected user ID
+  const [allUsers, setAllUsers] = useState<ChatUser[]>([]);
+  const [userMap, setUserMap] = useState<Map<string, ChatUser>>(new Map());
+  const [showUserProfileModal, setShowUserProfileModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // No longer hardcoding recipient, as it's a public forum
-  // We will fetch all messages of type 'public_forum'
-
-  // Fetch all users to map senderId to username
+  // Fetch all users to display in the user list
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await fetch('/api/users'); // Fetch all users
+        const res = await fetch('/api/users');
         if (res.ok) {
-          const data = await res.json();
+          const data: ChatUser[] = await res.json();
           setAllUsers(data);
-          const map = new Map<string, string>();
-          data.forEach((u: any) => map.set(u._id, u.username));
+          const map = new Map<string, ChatUser>();
+          data.forEach((u) => map.set(u._id, u));
           setUserMap(map);
         } else {
           console.error('Failed to fetch all users:', await res.json());
@@ -48,12 +51,11 @@ const Messaging = () => {
     fetchAllUsers();
   }, []);
 
-
+  // Fetch all public messages
   const fetchMessages = useCallback(async () => {
-    if (!user) return; // Only need user to be logged in
-
+    if (!user) return;
     try {
-      const res = await fetch(`/api/messages`); // Fetch all public messages
+      const res = await fetch(`/api/messages`);
       if (res.ok) {
         const data: Message[] = await res.json();
         setMessages(data);
@@ -65,33 +67,37 @@ const Messaging = () => {
     }
   }, [user]);
 
+  // Scroll to the bottom of the messages list
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Fetch messages on mount and then poll for new ones
   useEffect(() => {
     fetchMessages();
-    // Optional: Poll for new messages every few seconds (for basic real-time)
     const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
     return () => clearInterval(interval);
   }, [fetchMessages]);
 
+  // Handle sending a new message
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !newMessage.trim()) return; // Removed recipientId check
+    if (!user || !newMessage.trim()) return;
 
     try {
       const res = await fetch('/api/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          senderId: user._id,
-          // recipientId, // Removed recipientId
-          content: newMessage,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senderId: user._id, content: newMessage }),
       });
 
       if (res.ok) {
         setNewMessage('');
-        fetchMessages(); // Refresh messages after sending
+        fetchMessages(); // Refresh messages immediately
       } else {
         console.error('Failed to send message:', await res.json());
       }
@@ -100,72 +106,82 @@ const Messaging = () => {
     }
   };
 
+  // Handle opening the user profile modal
+  const handleUserClick = (userId: string) => {
+    setSelectedUserId(userId);
+    setShowUserProfileModal(true);
+  };
+
   if (!user) {
-    return <p>Please log in to view messages.</p>;
+    return <p className="text-center mt-5">Please log in to view the chat.</p>;
   }
 
   return (
-    <Container className="mt-5">
-      <Card>
-        <Card.Header as="h5">Public Forum</Card.Header> {/* Changed header */}
-        <Card.Body>
-          <ListGroup variant="flush" className="mb-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {messages.map((msg) => (
-              <ListGroup.Item
-                key={msg._id}
-                className={`d-flex ${msg.senderId === user._id ? 'justify-content-end' : 'justify-content-start'}`}
-              >
-                <div
-                  className={`p-2 rounded`}
-                  style={{
-                    maxWidth: '70%',
-                    backgroundColor: msg.senderId === user._id ? (user.profileCustomization.chatBubbleColor || 'var(--primary-color)') : 'var(--card-bg)', // Use user's custom color or default
-                    color: msg.senderId === user._id ? 'var(--navbar-text)' : 'var(--card-text)', // Use theme variables
-                  }}
-                >
-                  <strong
-                    onClick={() => {
-                      setSelectedUserId(msg.senderId);
-                      setShowUserProfileModal(true);
-                    }}
-                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                  >
-                    {msg.senderId === user._id ? 'You' : userMap.get(msg.senderId) || 'Unknown'}:
-                  </strong> {msg.content} {/* Show sender username */}
-                  <div className="text-muted small" style={{ fontSize: '0.75em' }}>
-                    {new Date(msg.timestamp).toLocaleTimeString()}
+    <>
+      <div className="messaging-container">
+        {/* Column 1: Channels/Servers (Placeholder) */}
+        <div className="channels-column">
+          {/* Placeholder for server icons */}
+          <div className="user-avatar" style={{ backgroundColor: '#7289da' }}>G</div>
+          <div className="user-avatar mt-2" style={{ backgroundColor: '#43b581' }}>V</div>
+        </div>
+
+        {/* Column 2: User List */}
+        <div className="users-column">
+          <h5 className="text-secondary text-uppercase small px-2 mb-2">Users</h5>
+          <ul className="user-list">
+            {allUsers.map((u) => (
+              <li key={u._id} className="user-list-item" onClick={() => handleUserClick(u._id)}>
+                <img src={u.profilePictureUrl || '/default-avatar.png'} alt={u.username} className="user-avatar" />
+                <span>{u.username}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Column 3: Chat Area */}
+        <div className="chat-column">
+          <div className="chat-messages">
+            {messages.map((msg) => {
+              const sender = userMap.get(msg.senderId);
+              return (
+                <div key={msg._id} className="message-group">
+                  <div className="message">
+                    <img src={sender?.profilePictureUrl || '/default-avatar.png'} alt={sender?.username} className="user-avatar" />
+                    <div>
+                      <div>
+                        <span className="username" style={{ color: user?.profileCustomization?.chatBubbleColor || 'var(--text-link)' }} onClick={() => handleUserClick(msg.senderId)}>{sender?.username || 'Unknown'}</span>
+                        <span className="timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                      </div>
+                      <div className="message-content">{msg.content}</div>
+                    </div>
                   </div>
                 </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-
-          <Form onSubmit={handleSendMessage}>
-            <InputGroup>
-              <Form.Control
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="chat-input-form">
+            <form onSubmit={handleSendMessage}>
+              <input
                 type="text"
+                className="chat-input"
                 placeholder="Type your message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                aria-label="New message"
               />
-              <Button variant="primary" type="submit">
-                Send
-              </Button>
-            </InputGroup>
-          </Form>
-        </Card.Body>
-      </Card>
+            </form>
+          </div>
+        </div>
+      </div>
 
+      {/* User Profile Modal */}
       <Modal show={showUserProfileModal} onHide={() => setShowUserProfileModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>User Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ backgroundColor: 'var(--background-tertiary)'}}>
           {selectedUserId && <UserDisplayProfile userId={selectedUserId} onClose={() => setShowUserProfileModal(false)} />}
         </Modal.Body>
       </Modal>
-    </Container>
+    </>
   );
 };
 
