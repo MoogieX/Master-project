@@ -33,9 +33,9 @@ interface User {
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  login: (username: string, password: string) => boolean;
+  login: (username: string, password: string) => Promise<boolean>; // Updated to return Promise<boolean>
   logout: () => void;
-  updateUserProfile: (updatedUser: User) => void; // New function to update profile
+  updateUserProfile: (updatedUser: User) => Promise<void>; // Updated to return Promise<void>
 }
 
 // Create the context with a default value
