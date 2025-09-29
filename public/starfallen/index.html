@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sci-Fi RPG</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            margin: 20px;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+        }
+        #game-output {
+            border: 1px solid #00ff00;
+            padding: 10px;
+            min-height: 300px;
+            max-height: 600px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: #000000;
+        }
+        #user-input {
+            width: calc(100% - 22px); /* Account for padding and border */
+            padding: 10px;
+            background-color: #000000;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sci-Fi RPG</h1>
+    <div id="game-output"></div>
+    <input type="text" id="user-input" autofocus>
+
+    <script src="game.js"></script>
+
+    <!-- Audio Elements -->
+    <audio id="bg-music" loop>
+        <source src="audio/background_music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="sfx">
+        <source src="audio/sfx.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+</html>
