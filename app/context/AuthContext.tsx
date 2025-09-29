@@ -15,6 +15,8 @@ interface ProfileCustomization {
   textColor: string;
   backgroundColor: string; // Added background color
   chatBubbleColor: string; // Added chat bubble color
+  profileGradient: string; // Added profile gradient
+  profileBannerUrl: string; // Added profile banner URL
   // Add font, background, etc. later
 }
 
@@ -64,6 +66,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       textColor: '#212529', // Default light mode text color
       backgroundColor: '#ffffff', // Default light mode background color
       chatBubbleColor: '#007bff', // Default primary color for chat bubbles
+      profileGradient: 'linear-gradient(90deg, #36393f, #2f3136)', // Default gradient
+      profileBannerUrl: '', // Default empty banner URL
     },
   });
 

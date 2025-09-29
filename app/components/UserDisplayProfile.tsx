@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Card, Container, Spinner } from 'react-bootstrap';
+import { Card, Container, Spinner, Button } from 'react-bootstrap'; // Import Button
 
 interface UserDisplayProfileProps {
   userId: string;
