@@ -7,12 +7,11 @@ import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { login } = useAuth();
 
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null); // Clear previous errors
     const success = login(username, password);
@@ -52,7 +51,6 @@ const Login = () => {
             <Button className="w-100 mt-4" type="submit">
               Login
             </Button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
           </Form>
         </Card.Body>
       </Card>
