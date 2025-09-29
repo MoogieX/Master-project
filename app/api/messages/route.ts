@@ -11,7 +11,8 @@ export async function POST(request: Request) {
     }
 
     // Basic chat moderation: keyword filtering
-    const forbiddenWords = ['badword1', 'badword2', 'hate', 'swear']; // Example list
+    // Adjusted to allow soft swear words, focusing on slurs and highly offensive terms.
+    const forbiddenWords = ['n-word', 'faggot', 'chink', 'paki', 'kike', 'coon', 'gook', 'spic', 'wetback', 'tranny']; // Example list of slurs
     const lowerCaseContent = content.toLowerCase();
 
     for (const word of forbiddenWords) {
