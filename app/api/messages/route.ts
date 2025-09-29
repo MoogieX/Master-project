@@ -86,7 +86,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ message: 'User ID is required to fetch messages' }, { status: 400 });
     }
 
-    const messages = await messagesCollection.find(query).sort({ timestamp: 1 }).toArray();
+    const messages = await messagesCollection.find(query).sort({ timestamp: 1 }).toArray() as MessageDocument[];
 
     // Convert ObjectId fields to strings for frontend consumption
     // Define an interface for the message document from MongoDB
