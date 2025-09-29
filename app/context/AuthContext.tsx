@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: updatedUser._id.toHexString(), updatedProfile: updatedUser }),
+        body: JSON.stringify({ userId: updatedUser._id, updatedProfile: updatedUser }), // Removed .toHexString()
       });
 
       if (res.ok) {
