@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Card, Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
+import { Container, Card, Form, Button, ListGroup, InputGroup, Modal } from 'react-bootstrap'; // Import Modal
 import { useAuth } from '../context/AuthContext';
+import UserDisplayProfile from './UserDisplayProfile'; // Import UserDisplayProfile
 
 // Define the shape of a message for the frontend
 interface Message {
   _id: string;
   senderId: string;
-  recipientId: string;
+  // recipientId: string; // Removed for public forum
   content: string;
   timestamp: string; // ISO date string
   read: boolean;
@@ -20,6 +21,8 @@ const Messaging = () => {
   const [newMessage, setNewMessage] = useState('');
   const [allUsers, setAllUsers] = useState<any[]>([]); // State to store all users
   const [userMap, setUserMap] = useState<Map<string, string>>(new Map()); // Map userId to username
+  const [showUserProfileModal, setShowUserProfileModal] = useState(false); // State to control modal visibility
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null); // State to store selected user ID
 
   // No longer hardcoding recipient, as it's a public forum
   // We will fetch all messages of type 'public_forum'
@@ -120,7 +123,15 @@ const Messaging = () => {
                     color: msg.senderId === user._id ? 'var(--navbar-text)' : 'var(--card-text)', // Use theme variables
                   }}
                 >
-                  <strong>{msg.senderId === user._id ? 'You' : userMap.get(msg.senderId) || 'Unknown'}:</strong> {msg.content} {/* Show sender username */}
+                  <strong
+                    onClick={() => {
+                      setSelectedUserId(msg.senderId);
+                      setShowUserProfileModal(true);
+                    }}
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    {msg.senderId === user._id ? 'You' : userMap.get(msg.senderId) || 'Unknown'}:
+                  </strong> {msg.content} {/* Show sender username */}
                   <div className="text-muted small" style={{ fontSize: '0.75em' }}>
                     {new Date(msg.timestamp).toLocaleTimeString()}
                   </div>
@@ -145,6 +156,15 @@ const Messaging = () => {
           </Form>
         </Card.Body>
       </Card>
+
+      <Modal show={showUserProfileModal} onHide={() => setShowUserProfileModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>User Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedUserId && <UserDisplayProfile userId={selectedUserId} onClose={() => setShowUserProfileModal(false)} />}
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

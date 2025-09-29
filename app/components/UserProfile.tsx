@@ -12,7 +12,9 @@ const UserProfile = () => {
   const { user, updateUserProfile } = useAuth();
   const [status, setStatus] = useState('');
   const [editingStatus, setEditingStatus] = useState(false);
-  const [profilePictureUrl, setProfilePictureUrl] = useState('');
+  const [school, setSchool] = useState(user?.school || ''); // State for school
+  const [editingSchool, setEditingSchool] = useState(false); // State for editing school
+  const [profilePictureUrl, setProfilePictureUrl] = useState(user?.profilePictureUrl || '');
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [imageError, setImageError] = useState(false); // State to track image loading errors
 
@@ -149,6 +151,36 @@ const UserProfile = () => {
           )}
           {!editingStatus && (
             <Button variant="primary" size="sm" onClick={() => setEditingStatus(true)}>Edit Status</Button>
+          )}
+
+          <hr />
+
+          <Card.Title>School:</Card.Title>
+          {editingSchool ? (
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                value={school}
+                onChange={(e) => setSchool(e.target.value)}
+              />
+              <Button variant="success" size="sm" className="mt-2 me-2" onClick={() => {
+                if (user && updateUserProfile) {
+                  updateUserProfile({ ...user, school });
+                  setEditingSchool(false);
+                }
+              }}>Save</Button>
+              <Button variant="secondary" size="sm" className="mt-2" onClick={() => {
+                if (user) {
+                  setSchool(user.school);
+                }
+                setEditingSchool(false);
+              }}>Cancel</Button>
+            </Form.Group>
+          ) : (
+            <Card.Text>{user.school}</Card.Text>
+          )}
+          {!editingSchool && (
+            <Button variant="primary" size="sm" onClick={() => setEditingSchool(true)}>Edit School</Button>
           )}
 
           <hr />

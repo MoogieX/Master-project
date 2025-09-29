@@ -24,6 +24,7 @@ interface User {
   username: string;
   status: string;
   profilePictureUrl: string;
+  school: string; // Added school field
   savedGames: SavedGame[];
   profileCustomization: ProfileCustomization;
 }
@@ -57,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     username,
     status: 'Hello, I am new here!',
     profilePictureUrl: 'https://via.placeholder.com/150', // Default profile picture
+    school: 'Your School District', // Default school
     savedGames: [],
     profileCustomization: {
       textColor: '#212529', // Default light mode text color
