@@ -4,6 +4,7 @@ import { Container, Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import ThemeToggle from './components/ThemeToggle'; // Import ThemeToggle
+import TextColorPicker from './components/TextColorPicker'; // Import TextColorPicker
 
 export default function Home() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -30,6 +31,7 @@ export default function Home() {
               </Navbar.Text>
               <Nav.Link onClick={logout}>Logout</Nav.Link>
               <ThemeToggle /> {/* Added ThemeToggle component */}
+              <TextColorPicker /> {/* Added TextColorPicker component */}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -22,6 +22,9 @@
   --card-text: #f8f9fa;
   --navbar-bg: #212529;
   --navbar-text: #f8f9fa;
+  --btn-primary-bg: #0056b3; /* Darker blue for primary buttons in dark mode */
+  --btn-primary-color: #ffffff;
+  --btn-primary-border: #0056b3;
 }
 
 /* Apply global styles */
@@ -37,6 +40,12 @@ body {
   background-color: var(--card-bg);
   color: var(--card-text);
   border-color: var(--secondary-color);
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-bg, var(--primary-color));
+  color: var(--btn-primary-color, #ffffff);
+  border-color: var(--btn-primary-border, var(--primary-color));
 }
 
 .navbar {
