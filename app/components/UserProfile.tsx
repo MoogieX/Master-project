@@ -72,7 +72,7 @@ const UserProfile = () => {
                 ?
               </div>
             )}
-            {editingProfilePicture ? (
+            {editingProfilePicture && user?._id !== '65f2a1b3c4d5e6f7a8b9c0d3' ? ( // Only allow editing if not guest
               <Form.Group className="mt-3">
                 <Form.Control
                   type="file" // Changed to file input
@@ -117,7 +117,18 @@ const UserProfile = () => {
                 }}>Cancel</Button>
               </Form.Group>
             ) : (
-              <Button variant="primary" size="sm" className="mt-3" onClick={() => setEditingProfilePicture(true)}>Change Profile Picture</Button>
+              <Button
+                variant="primary"
+                size="sm"
+                className="mt-3"
+                onClick={() => setEditingProfilePicture(true)}
+                disabled={user?._id === '65f2a1b3c4d5e6f7a8b9c0d3'} // Disable for guest account
+              >
+                Change Profile Picture
+              </Button>
+            )}
+            {user?._id === '65f2a1b3c4d5e6f7a8b9c0d3' && (
+              <p className="text-muted mt-2">Guest accounts cannot change profile pictures.</p>
             )}
           </div>
 

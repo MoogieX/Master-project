@@ -43,6 +43,11 @@ export async function PUT(request: Request) {
     // Remove _id from updatedProfile to prevent issues with $set
     const { _id, ...profileToUpdate } = updatedProfile;
 
+    // Prevent guest account from changing profile picture
+    if (userId === '65f2a1b3c4d5e6f7a8b9c0d3' && profileToUpdate.profilePictureUrl) {
+      return NextResponse.json({ message: 'Guest account cannot change profile picture' }, { status: 403 });
+    }
+
     const result = await usersCollection.updateOne(
       { _id: new ObjectId(userId) },
       { $set: profileToUpdate } // Use profileToUpdate without _id
