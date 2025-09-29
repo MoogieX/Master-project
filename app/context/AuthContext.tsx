@@ -41,8 +41,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Hardcoded user data (for initial login, actual profile data will be loaded/saved)
 const initialUsers: { id: string; username: string; password: string }[] = [
-  { id: '1', username: 'ringthebell02', password: 'Gage@0424' },
-  { id: '2', username: 'Moogietheboogie', password: 'Yippiebugz@666' },
+  { id: '65f2a1b3c4d5e6f7a8b9c0d1', username: 'ringthebell02', password: 'Gage@0424' }, // Generated ObjectId string
+  { id: '65f2a1b3c4d5e6f7a8b9c0d2', username: 'Moogietheboogie', password: 'Yippiebugz@666' }, // Generated ObjectId string
 ];
 
 // Create the provider component
