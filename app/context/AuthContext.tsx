@@ -14,6 +14,7 @@ interface SavedGame {
 interface ProfileCustomization {
   textColor: string;
   backgroundColor: string; // Added background color
+  chatBubbleColor: string; // Added chat bubble color
   // Add font, background, etc. later
 }
 
@@ -60,6 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     profileCustomization: {
       textColor: '#212529', // Default light mode text color
       backgroundColor: '#ffffff', // Default light mode background color
+      chatBubbleColor: '#007bff', // Default primary color for chat bubbles
     },
   });
 

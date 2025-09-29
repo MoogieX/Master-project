@@ -7,23 +7,29 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 
-    if (!userId) {
-      return NextResponse.json({ message: 'User ID is required' }, { status: 400 });
-    }
-
     const client = await clientPromise;
     const db = client.db('gamehub'); // Replace 'gamehub' with your database name
     const usersCollection = db.collection('users'); // Collection for user profiles
 
-    const userProfile = await usersCollection.findOne({ _id: new ObjectId(userId) });
+    if (userId) {
+      const userProfile = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
-    if (!userProfile) {
-      return NextResponse.json({ message: 'User profile not found' }, { status: 404 });
+      if (!userProfile) {
+        return NextResponse.json({ message: 'User profile not found' }, { status: 404 });
+      }
+      return NextResponse.json(userProfile);
+    } else {
+      // If no userId is provided, fetch all users (or a subset for a public list)
+      const allUsers = await usersCollection.find({}).project({ _id: 1, username: 1, profilePictureUrl: 1 }).toArray();
+      const formattedUsers = allUsers.map(u => ({
+        _id: u._id.toHexString(),
+        username: u.username,
+        profilePictureUrl: u.profilePictureUrl,
+      }));
+      return NextResponse.json(formattedUsers);
     }
-
-    return NextResponse.json(userProfile);
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error('Error fetching user profile(s):', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

@@ -6,6 +6,7 @@ import { Container, Card, Form, Button, ListGroup } from 'react-bootstrap';
 import TextColorPicker from './TextColorPicker'; // Assuming this is the correct path
 import BackgroundColorPicker from './BackgroundColorPicker'; // Import BackgroundColorPicker
 import ThemeToggle from './ThemeToggle'; // Import ThemeToggle
+import ChatBubbleColorPicker from './ChatBubbleColorPicker'; // Import ChatBubbleColorPicker
 
 const UserProfile = () => {
   const { user, updateUserProfile } = useAuth();
@@ -161,6 +162,9 @@ const UserProfile = () => {
           </div>
           <div className="d-flex align-items-center mb-3">
             <ThemeToggle />
+          </div>
+          <div className="d-flex align-items-center mb-3">
+            <ChatBubbleColorPicker />
           </div>
 
           <hr />
