@@ -13,6 +13,7 @@ interface SavedGame {
 // Define the shape of user profile customization
 interface ProfileCustomization {
   textColor: string;
+  backgroundColor: string; // Added background color
   // Add font, background, etc. later
 }
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Container, Card, Form, Button, ListGroup } from 'react-bootstrap';
 import TextColorPicker from './TextColorPicker'; // Assuming this is the correct path
+import BackgroundColorPicker from './BackgroundColorPicker'; // Import BackgroundColorPicker
 
 const UserProfile = () => {
   const { user, updateUserProfile } = useAuth();
@@ -66,6 +67,9 @@ const UserProfile = () => {
           <Card.Title className="mt-4">Profile Customization:</Card.Title>
           <div className="d-flex align-items-center mb-3">
             <TextColorPicker />
+          </div>
+          <div className="d-flex align-items-center mb-3">
+            <BackgroundColorPicker />
           </div>
 
           <hr />
