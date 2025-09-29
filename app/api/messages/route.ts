@@ -10,16 +10,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Sender ID, recipient ID, and content are required' }, { status: 400 });
     }
 
-    // Basic chat moderation: keyword filtering
-    // Adjusted to allow soft swear words, focusing on slurs and highly offensive terms.
-    const forbiddenWords = ['n-word', 'faggot', 'chink', 'paki', 'kike', 'coon', 'gook', 'spic', 'wetback', 'tranny']; // Example list of slurs
-    const lowerCaseContent = content.toLowerCase();
+    // Basic chat moderation: keyword filtering and censoring
+    // Focus on slurs and highly offensive terms, censoring them into ****
+    const forbiddenWords = [
+      'nigger', 'nigga', // N-word variations
+      'faggot', 'chink', 'paki', 'kike', 'coon', 'gook', 'spic', 'wetback', 'tranny'
+    ];
+    let moderatedContent = content; // Start with original content
 
     for (const word of forbiddenWords) {
-      if (lowerCaseContent.includes(word)) {
-        return NextResponse.json({ message: `Message contains forbidden word: "${word}"` }, { status: 400 });
-      }
+      // Create a regex to find the word globally and case-insensitively
+      const regex = new RegExp(word, 'gi');
+      moderatedContent = moderatedContent.replace(regex, '****');
     }
+
+    // Use the moderatedContent for saving
+    // If the content was entirely replaced by asterisks, you might want to reject it,
+    // but for now, we'll just save the censored version.
 
     const client = await clientPromise;
     const db = client.db('gamehub'); // Replace 'gamehub' with your database name
@@ -28,7 +35,7 @@ export async function POST(request: Request) {
     const newMessage = {
       senderId: new ObjectId(senderId),
       recipientId: new ObjectId(recipientId),
-      content,
+      content: moderatedContent, // Use the moderated content
       timestamp: new Date(),
       read: false,
     };
