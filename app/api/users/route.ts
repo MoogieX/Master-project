@@ -55,3 +55,34 @@ export async function PUT(request: Request) {
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const newUserProfile = await request.json();
+
+    if (!newUserProfile || !newUserProfile._id || !newUserProfile.username) {
+      return NextResponse.json({ message: 'Invalid user profile data' }, { status: 400 });
+    }
+
+    const client = await clientPromise;
+    const db = client.db('gamehub'); // Replace 'gamehub' with your database name
+    const usersCollection = db.collection('users');
+
+    // Ensure _id is an ObjectId before inserting
+    const profileToInsert = {
+      ...newUserProfile,
+      _id: new ObjectId(newUserProfile._id),
+    };
+
+    const result = await usersCollection.insertOne(profileToInsert);
+
+    if (!result.insertedId) {
+      return NextResponse.json({ message: 'Failed to create user profile' }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: 'User profile created successfully', _id: result.insertedId.toHexString() }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating user profile:', error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
+}

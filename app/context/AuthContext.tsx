@@ -95,11 +95,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (res.status === 404) { // User not found in DB, create a new one
           const newUserProfile = getDefaultUserProfile(foundInitialUser.id, foundInitialUser.username);
-          // Insert new user into MongoDB (this would require a POST API route, for now we'll simulate)
-          // For simplicity, we'll just set it locally and assume it will be created on first update
-          setUser(newUserProfile);
-          localStorage.setItem('currentUserId', newUserProfile._id); // _id is already a string
-          return true;
+          
+          // Create new user in MongoDB via POST API route
+          const createRes = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUserProfile),
+          });
+
+          if (createRes.ok) {
+            const createdUser = await createRes.json();
+            setUser({ ...newUserProfile, _id: createdUser._id }); // Use _id returned from DB
+            localStorage.setItem('currentUserId', createdUser._id);
+            return true;
+          } else {
+            console.error('Failed to create new user profile in DB:', await createRes.json());
+            return false;
+          }
         } else if (res.ok) {
           setUser({ ...userProfile, _id: userProfile._id }); // _id is already a string from API
           localStorage.setItem('currentUserId', userProfile._id);
