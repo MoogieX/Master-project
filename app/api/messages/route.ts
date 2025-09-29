@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '../../../../lib/mongodb';
+import clientPromise from '~/lib/mongodb'; // Corrected import path
 import { ObjectId } from 'mongodb';
 
 export async function POST(request: Request) {
@@ -70,7 +70,18 @@ export async function GET(request: Request) {
     const messages = await messagesCollection.find(query).sort({ timestamp: 1 }).toArray();
 
     // Convert ObjectId fields to strings for frontend consumption
-    const formattedMessages = messages.map(msg => ({
+    // Define an interface for the message document from MongoDB
+    interface MessageDocument {
+      _id: ObjectId;
+      senderId: ObjectId;
+      recipientId: ObjectId;
+      content: string;
+      timestamp: Date;
+      read: boolean;
+      // Add other fields if necessary
+    }
+
+    const formattedMessages = messages.map((msg: MessageDocument) => ({
       ...msg,
       _id: msg._id.toHexString(),
       senderId: msg.senderId.toHexString(),
