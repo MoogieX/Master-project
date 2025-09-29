@@ -43,6 +43,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const initialUsers: { id: string; username: string; password: string }[] = [
   { id: '65f2a1b3c4d5e6f7a8b9c0d1', username: 'ringthebell02', password: 'Gage@0424' }, // Generated ObjectId string
   { id: '65f2a1b3c4d5e6f7a8b9c0d2', username: 'Moogietheboogie', password: 'Yippiebugz@666' }, // Generated ObjectId string
+  { id: '65f2a1b3c4d5e6f7a8b9c0d3', username: 'guest', password: '0000' }, // Guest account
 ];
 
 // Create the provider component
