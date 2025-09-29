@@ -3,13 +3,11 @@ import path from 'path'; // Import path module
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: {
-    // Explicitly set the root directory for file tracing
-    // This should be the absolute path to your game-hub project
-    // Replace with your actual path if different
-    // Use path.join to ensure cross-platform compatibility
-    outputFileTracingRoot: path.join(__dirname, './'),
-  },
+  // Explicitly set the root directory for file tracing
+  // This should be the absolute path to your game-hub project
+  // Replace with your actual path if different
+  // Use path.join to ensure cross-platform compatibility
+  outputFileTracingRoot: path.join(__dirname, './'),
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
