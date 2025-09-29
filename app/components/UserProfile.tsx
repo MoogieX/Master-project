@@ -13,6 +13,7 @@ const UserProfile = () => {
   const [editingStatus, setEditingStatus] = useState(false);
   const [profilePictureUrl, setProfilePictureUrl] = useState(user?.profilePictureUrl || '');
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
+  const [imageError, setImageError] = useState(false); // State to track image loading errors
 
   useEffect(() => {
     if (user) {
@@ -31,6 +32,11 @@ const UserProfile = () => {
     }
   };
 
+  // Reset imageError when profilePictureUrl changes
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.profilePictureUrl]);
+
   const handleCancelEditStatus = () => {
     if (user) {
       setStatus(user.status);
@@ -48,12 +54,23 @@ const UserProfile = () => {
         <Card.Header as="h5">User Profile: {user.username}</Card.Header>
         <Card.Body>
           <div className="text-center mb-4">
-            <img
-              src={user.profilePictureUrl}
-              alt="Profile"
-              className="rounded-circle"
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-            />
+            {/* Conditionally render image or placeholder */}
+            {user.profilePictureUrl && !imageError ? (
+              <img
+                src={user.profilePictureUrl}
+                alt="Profile"
+                className="rounded-circle"
+                style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                onError={() => setImageError(true)} // Set error state on image load failure
+              />
+            ) : (
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white"
+                style={{ width: '150px', height: '150px', objectFit: 'cover', fontSize: '3rem' }}
+              >
+                ?
+              </div>
+            )}
             {editingProfilePicture ? (
               <Form.Group className="mt-3">
                 <Form.Control
