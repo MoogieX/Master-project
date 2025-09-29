@@ -40,9 +40,12 @@ export async function PUT(request: Request) {
     const db = client.db('gamehub'); // Replace 'gamehub' with your database name
     const usersCollection = db.collection('users');
 
+    // Remove _id from updatedProfile to prevent issues with $set
+    const { _id, ...profileToUpdate } = updatedProfile;
+
     const result = await usersCollection.updateOne(
       { _id: new ObjectId(userId) },
-      { $set: updatedProfile }
+      { $set: profileToUpdate } // Use profileToUpdate without _id
     );
 
     if (result.matchedCount === 0) {
