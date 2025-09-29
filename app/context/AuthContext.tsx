@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(`userProfile_${updatedUser.id}`, JSON.stringify(updatedUser));
   };
 
-  const isAuthenticated = user !== null;
+  const isAuthenticated = user !== null; // Correctly placed
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout, updateUserProfile }}>
