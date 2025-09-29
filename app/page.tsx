@@ -6,10 +6,12 @@ import { Container, Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import UserProfile from './components/UserProfile'; // Import UserProfile
+import Messaging from './components/Messaging'; // Import Messaging
 
 export default function Home() {
   const { isAuthenticated, user, logout } = useAuth();
   const [showProfile, setShowProfile] = useState(false); // State to control profile visibility
+  const [showMessaging, setShowMessaging] = useState(false); // State to control messaging visibility
 
   if (!isAuthenticated) {
     return <Login />;
@@ -28,7 +30,7 @@ export default function Home() {
               <Nav.Link onClick={() => setShowProfile(false)}>Home</Nav.Link> {/* Home Link */}
               <Nav.Link href="#games">Games</Nav.Link>
               <Nav.Link href="#projects">Projects</Nav.Link>
-              <Nav.Link href="#messaging">Messaging</Nav.Link>
+              <Nav.Link onClick={() => setShowMessaging(true)}>Messaging</Nav.Link> {/* Messaging Link */}
               <Nav.Link onClick={() => setShowProfile(true)}>Profile</Nav.Link> {/* Profile Link */}
             </Nav>
             <Nav className="d-flex align-items-center"> {/* Added d-flex and align-items-center for alignment */} 
@@ -41,7 +43,9 @@ export default function Home() {
         </Container>
       </Navbar>
 
-      {showProfile ? (
+      {showMessaging ? (
+        <Messaging />
+      ) : showProfile ? (
         <UserProfile />
       ) : (
         <Container className="mt-5 pt-5">
