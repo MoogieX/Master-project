@@ -17,11 +17,9 @@ interface ProfileCustomization {
   // Add font, background, etc. later
 }
 
-import { ObjectId } from 'mongodb'; // Import ObjectId
-
 // Define the shape of the User
 interface User {
-  _id: ObjectId; // MongoDB's default ID type
+  _id: string; // MongoDB's default ID type will be represented as a string in the client
   username: string;
   status: string;
   profilePictureUrl: string;
@@ -53,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Function to get a default user profile
   const getDefaultUserProfile = (id: string, username: string): User => ({
-    _id: new ObjectId(id), // Use ObjectId for MongoDB
+    _id: id, // _id will be a string in the client
     username,
     status: 'Hello, I am new here!',
     profilePictureUrl: 'https://via.placeholder.com/150', // Default profile picture
@@ -72,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .then(res => res.json())
         .then(data => {
           if (data && !data.message) { // Check if data is valid and not an error message
-            setUser({ ...data, _id: new ObjectId(data._id) }); // Re-hydrate ObjectId
+            setUser({ ...data, _id: data._id }); // _id is already a string from API
           } else {
             localStorage.removeItem('currentUserId'); // Clear invalid user
           }
@@ -100,10 +98,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           // Insert new user into MongoDB (this would require a POST API route, for now we'll simulate)
           // For simplicity, we'll just set it locally and assume it will be created on first update
           setUser(newUserProfile);
-          localStorage.setItem('currentUserId', newUserProfile._id.toHexString());
+          localStorage.setItem('currentUserId', newUserProfile._id); // _id is already a string
           return true;
         } else if (res.ok) {
-          setUser({ ...userProfile, _id: new ObjectId(userProfile._id) }); // Re-hydrate ObjectId
+          setUser({ ...userProfile, _id: userProfile._id }); // _id is already a string from API
           localStorage.setItem('currentUserId', userProfile._id);
           return true;
         }
