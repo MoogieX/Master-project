@@ -18,32 +18,33 @@ export default function Home() {
   }
 
   return (
-    <>
-            <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
-              <Container>
-                <Link href="/" passHref legacyBehavior>
-                  <Navbar.Brand>Game Hub</Navbar.Brand>
-                </Link>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                  <Nav className="me-auto">
-                    <Nav.Link onClick={() => setShowProfile(false)}>Home</Nav.Link> {/* Home Link */}
-                    <Nav.Link href="#games">Games</Nav.Link>
-                    <Nav.Link href="#projects">Projects</Nav.Link>
-                    <Nav.Link href="#messaging">Messaging</Nav.Link>
-                    <Nav.Link onClick={() => setShowProfile(true)}>Profile</Nav.Link> {/* Profile Link */}
-                  </Nav>
-                  <Nav className="d-flex align-items-center"> {/* Added d-flex and align-items-center for alignment */}
-                    <Navbar.Text className="me-3 mb-0"> {/* Added mb-0 to remove bottom margin */} 
-                      Signed in as: <strong>{user?.username}</strong>
-                    </Navbar.Text>
-                    <Nav.Link onClick={logout}>Logout</Nav.Link>
-                    <ThemeToggle /> {/* Added ThemeToggle component */}
-                    <TextColorPicker /> {/* Added TextColorPicker component */}
-                  </Nav>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
+    <div> {/* Changed from <> to <div> */}
+      <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+        <Container>
+          <Link href="/" passHref legacyBehavior>
+            <Navbar.Brand>Game Hub</Navbar.Brand>
+          </Link>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            <Nav className="me-auto">
+              <Nav.Link onClick={() => setShowProfile(false)}>Home</Nav.Link> {/* Home Link */}
+              <Nav.Link href="#games">Games</Nav.Link>
+              <Nav.Link href="#projects">Projects</Nav.Link>
+              <Nav.Link href="#messaging">Messaging</Nav.Link>
+              <Nav.Link onClick={() => setShowProfile(true)}>Profile</Nav.Link> {/* Profile Link */}
+            </Nav>
+            <Nav className="d-flex align-items-center"> {/* Added d-flex and align-items-center for alignment */} 
+              <Navbar.Text className="me-3 mb-0"> {/* Added mb-0 to remove bottom margin */} 
+                Signed in as: <strong>{user?.username}</strong>
+              </Navbar.Text>
+              <Nav.Link onClick={logout}>Logout</Nav.Link>
+              <ThemeToggle /> {/* Added ThemeToggle component */}
+              <TextColorPicker /> {/* Added TextColorPicker component */}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
       {showProfile ? (
         <UserProfile />
       ) : (
@@ -98,4 +99,5 @@ export default function Home() {
           </section>
         </Container>
       )}
-    </>
+    </div> {/* Changed from </> to </div> */}
+  );
