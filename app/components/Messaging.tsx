@@ -91,8 +91,12 @@ const Messaging = () => {
                 className={`d-flex ${msg.senderId === user._id ? 'justify-content-end' : 'justify-content-start'}`}
               >
                 <div
-                  className={`p-2 rounded ${msg.senderId === user._id ? 'bg-primary text-white' : 'bg-light text-dark'}`}
-                  style={{ maxWidth: '70%' }}
+                  className={`p-2 rounded`}
+                  style={{
+                    maxWidth: '70%',
+                    backgroundColor: msg.senderId === user._id ? 'var(--primary-color)' : 'var(--card-bg)', // Use theme variables
+                    color: msg.senderId === user._id ? 'var(--navbar-text)' : 'var(--card-text)', // Use theme variables
+                  }}
                 >
                   <strong>{msg.senderId === user._id ? 'You' : msg.senderId}:</strong> {msg.content} {/* Show sender ID for now */}
                   <div className="text-muted small" style={{ fontSize: '0.75em' }}>
