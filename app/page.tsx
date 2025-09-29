@@ -64,11 +64,11 @@ export default function Home() {
               </div>
               <div className="col-md-4 mb-4">
                 <div className="card h-100 shadow-sm"> {/* Added h-100 and shadow-sm */}
-                  <img src="/textgame.jpg" className="card-img-top" alt="TEXTGAME" style={{ height: '180px', objectFit: 'cover' }} /> {/* Added image */}
+                  <img src="/starfallen.jpg" className="card-img-top" alt="Starfallen" style={{ height: '180px', objectFit: 'cover' }} /> {/* Added image */}
                   <div className="card-body d-flex flex-column"> {/* Added d-flex flex-column */}
-                    <h5 className="card-title">TEXTGAME</h5>
+                    <h5 className="card-title">Starfallen</h5>
                     <p className="card-text flex-grow-1">Your sci-fi RPG.</p> {/* Added flex-grow-1 */}
-                    <a href="/textgame" className="btn btn-primary mt-auto">Play Now</a> {/* Added mt-auto */}
+                    <a href="/starfallen" className="btn btn-primary mt-auto">Play Now</a> {/* Added mt-auto */}
                   </div>
                 </div>
               </div>
