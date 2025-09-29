@@ -11,6 +11,17 @@ const nextConfig: NextConfig = {
         "net": false, // net is also a common server-side module
         "tls": false, // tls is also a common server-side module
       };
+      // Explicitly ignore problematic mongodb sub-modules for client-side
+      config.externals.push({
+        'mongodb-client-encryption': 'mongodb-client-encryption',
+        'aws4': 'aws4',
+        'saslprep': 'saslprep',
+        'kerberos': 'kerberos',
+        'snappy': 'snappy',
+        'bson-ext': 'bson-ext',
+        'bufferutil': 'bufferutil',
+        'utf-8-validate': 'utf-8-validate',
+      });
     }
     return config;
   },
