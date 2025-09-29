@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from 'react'; // Import useState
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
