@@ -35,14 +35,8 @@ export default function Home() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
             <Nav className="me-auto">
-              <Nav.Link onClick={() => {
-                setShowProfile(false);
-                setShowMessaging(false);
-                setShowGames(true); // Show games by default on Home
-                setShowProjects(false);
-                setShowMovies(false);
-                setShowMusic(false);
-              }}>Home</Nav.Link> {/* Home Link */}
+              <Nav.Link onClick={() => setShowProfile(false)}>Home</Nav.Link> {/* Home Link */}
+              <Nav.Link href="https://docs.google.com/forms/d/17W5Yv9bXXdteiuiDTCbXN3zB73yfQR0S6G7KF1ucjl4/edit#response=ACYDBNgMDy9hTtRsDTGDQxA5GJ28ON5KfCF3ZRvXxcwMJFssEj0aNj6ZjB2HfFWsw" target="_blank" rel="noopener noreferrer">Create Account</Nav.Link> {/* Account Creation Link */}
               <Nav.Link onClick={() => {
                 setShowProfile(false);
                 setShowMessaging(false);
