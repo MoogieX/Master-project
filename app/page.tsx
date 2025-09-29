@@ -19,8 +19,8 @@ export default function Home() {
     <div> {/* Changed from <> to <div> */}
       <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
         <Container>
-          <Link href="/" passHref legacyBehavior>
-            <Navbar.Brand>Game Hub</Navbar.Brand>
+          <Link href="/" passHref>
+            <Navbar.Brand as="a">Game Hub</Navbar.Brand>
           </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
