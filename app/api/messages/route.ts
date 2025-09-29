@@ -4,10 +4,10 @@ import { ObjectId } from 'mongodb';
 
 export async function POST(request: Request) {
   try {
-    const { senderId, recipientId, content } = await request.json();
+    const { senderId, content } = await request.json(); // Removed recipientId
 
-    if (!senderId || !recipientId || !content) {
-      return NextResponse.json({ message: 'Sender ID, recipient ID, and content are required' }, { status: 400 });
+    if (!senderId || !content) { // Removed recipientId from validation
+      return NextResponse.json({ message: 'Sender ID and content are required' }, { status: 400 });
     }
 
     // Basic chat moderation: keyword filtering and censoring
@@ -35,10 +35,11 @@ export async function POST(request: Request) {
 
     const newMessage = {
       senderId: new ObjectId(senderId),
-      recipientId: new ObjectId(recipientId),
+      // recipientId: new ObjectId(recipientId), // Removed recipientId
       content: moderatedContent, // Use the moderated content
       timestamp: new Date(),
       read: false,
+      type: 'public_forum', // Add a type to distinguish public messages
     };
 
     const result = await messagesCollection.insertOne(newMessage);
@@ -56,55 +57,31 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const conversationPartnerId = searchParams.get('conversationPartnerId');
-
     const client = await clientPromise;
     const db = client.db('gamehub'); // Replace 'gamehub' with your database name
     const messagesCollection = db.collection('messages');
 
-    let query: any = {};
+    // Fetch all public forum messages
+    const messages = await messagesCollection.find({ type: 'public_forum' }).sort({ timestamp: 1 }).toArray() as MessageDocument[];
 
-    if (userId && conversationPartnerId) {
-      // Fetch conversation between two users
-      query = {
-        $or: [
-          { senderId: new ObjectId(userId), recipientId: new ObjectId(conversationPartnerId) },
-          { senderId: new ObjectId(conversationPartnerId), recipientId: new ObjectId(userId) },
-        ],
-      };
-    } else if (userId) {
-      // Fetch all messages for a user (inbox/sent)
-      query = {
-        $or: [
-          { senderId: new ObjectId(userId) },
-          { recipientId: new ObjectId(userId) },
-        ],
-      };
-    } else {
-      return NextResponse.json({ message: 'User ID is required to fetch messages' }, { status: 400 });
-    }
-
-    const messages = await messagesCollection.find(query).sort({ timestamp: 1 }).toArray() as MessageDocument[];
-
-    // Convert ObjectId fields to strings for frontend consumption
     // Define an interface for the message document from MongoDB
     interface MessageDocument {
       _id: ObjectId;
       senderId: ObjectId;
-      recipientId: ObjectId;
+      // recipientId: ObjectId; // Removed recipientId
       content: string;
       timestamp: Date;
       read: boolean;
+      type: string; // Added type
       // Add other fields if necessary
     }
 
+    // Convert ObjectId fields to strings for frontend consumption
     const formattedMessages = messages.map((msg: MessageDocument) => ({
       ...msg,
       _id: msg._id.toHexString(),
       senderId: msg.senderId.toHexString(),
-      recipientId: msg.recipientId.toHexString(),
+      // recipientId: msg.recipientId.toHexString(), // Removed recipientId
     }));
 
     return NextResponse.json(formattedMessages);

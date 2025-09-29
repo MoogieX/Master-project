@@ -18,27 +18,17 @@ const Messaging = () => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [recipientId, setRecipientId] = useState(''); // For now, hardcode or select a recipient
-  const [conversationPartner, setConversationPartner] = useState(''); // Display name of partner
+  // Removed recipientId and conversationPartner states
 
-  // For demonstration, let's assume the other user is 'Moogietheboogie' (ID: 65f2a1b3c4d5e6f7a8b9c0d2)
-  // In a real app, you'd have a list of friends to choose from.
-  useEffect(() => {
-    if (user && user._id === '65f2a1b3c4d5e6f7a8b9c0d1') { // If current user is ringthebell02
-      setRecipientId('65f2a1b3c4d5e6f7a8b9c0d2');
-      setConversationPartner('Moogietheboogie');
-    } else if (user && user._id === '65f2a1b3c4d5e6f7a8b9c0d2') { // If current user is Moogietheboogie
-      setRecipientId('65f2a1b3c4d5e6f7a8b9c0d1');
-      setConversationPartner('ringthebell02');
-    }
-  }, [user]);
+  // No longer hardcoding recipient, as it's a public forum
+  // We will fetch all messages of type 'public_forum'
 
 
   const fetchMessages = useCallback(async () => {
-    if (!user || !recipientId) return;
+    if (!user) return; // Only need user to be logged in
 
     try {
-      const res = await fetch(`/api/messages?userId=${user._id}&conversationPartnerId=${recipientId}`);
+      const res = await fetch(`/api/messages`); // Fetch all public messages
       if (res.ok) {
         const data: Message[] = await res.json();
         setMessages(data);
@@ -48,7 +38,7 @@ const Messaging = () => {
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
-  }, [user, recipientId]);
+  }, [user]);
 
   useEffect(() => {
     fetchMessages();
@@ -59,7 +49,7 @@ const Messaging = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !recipientId || !newMessage.trim()) return;
+    if (!user || !newMessage.trim()) return; // Removed recipientId check
 
     try {
       const res = await fetch('/api/messages', {
@@ -69,7 +59,7 @@ const Messaging = () => {
         },
         body: JSON.stringify({
           senderId: user._id,
-          recipientId,
+          // recipientId, // Removed recipientId
           content: newMessage,
         }),
       });
@@ -89,14 +79,10 @@ const Messaging = () => {
     return <p>Please log in to view messages.</p>;
   }
 
-  if (!recipientId) {
-    return <p>Select a conversation partner to start messaging.</p>;
-  }
-
   return (
     <Container className="mt-5">
       <Card>
-        <Card.Header as="h5">Messaging with {conversationPartner}</Card.Header>
+        <Card.Header as="h5">Public Forum</Card.Header> {/* Changed header */}
         <Card.Body>
           <ListGroup variant="flush" className="mb-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             {messages.map((msg) => (
@@ -108,7 +94,7 @@ const Messaging = () => {
                   className={`p-2 rounded ${msg.senderId === user._id ? 'bg-primary text-white' : 'bg-light text-dark'}`}
                   style={{ maxWidth: '70%' }}
                 >
-                  <strong>{msg.senderId === user._id ? 'You' : conversationPartner}:</strong> {msg.content}
+                  <strong>{msg.senderId === user._id ? 'You' : msg.senderId}:</strong> {msg.content} {/* Show sender ID for now */}
                   <div className="text-muted small" style={{ fontSize: '0.75em' }}>
                     {new Date(msg.timestamp).toLocaleTimeString()}
                   </div>
