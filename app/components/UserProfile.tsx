@@ -9,15 +9,16 @@ import ThemeToggle from './ThemeToggle'; // Import ThemeToggle
 
 const UserProfile = () => {
   const { user, updateUserProfile } = useAuth();
-  const [status, setStatus] = useState(user?.status || '');
+  const [status, setStatus] = useState('');
   const [editingStatus, setEditingStatus] = useState(false);
-  const [profilePictureUrl, setProfilePictureUrl] = useState(user?.profilePictureUrl || '');
+  const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [imageError, setImageError] = useState(false); // State to track image loading errors
 
   useEffect(() => {
     if (user) {
       setStatus(user.status);
+      setProfilePictureUrl(user.profilePictureUrl);
     }
   }, [user]);
 
@@ -81,7 +82,7 @@ const UserProfile = () => {
                 />
                 <Button variant="success" size="sm" className="mt-2 me-2" onClick={() => {
                   if (user && updateUserProfile) {
-                    updateUserProfile({ ...user, profilePictureUrl });
+                    updateUserProfile({ ...user, profilePictureUrl: profilePictureUrl });
                     setEditingProfilePicture(false);
                   }
                 }}>Save</Button>

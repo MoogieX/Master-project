@@ -17,13 +17,14 @@ interface ProfileCustomization {
   // Add font, background, etc. later
 }
 
+import { ObjectId } from 'mongodb'; // Import ObjectId
+
 // Define the shape of the User
 interface User {
-  id: string;
+  _id: ObjectId; // MongoDB's default ID type
   username: string;
-  password?: string; // Password is not exposed after login
   status: string;
-  profilePictureUrl: string; // Added profile picture URL
+  profilePictureUrl: string;
   savedGames: SavedGame[];
   profileCustomization: ProfileCustomization;
 }
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Function to get a default user profile
   const getDefaultUserProfile = (id: string, username: string): User => ({
-    id,
+    _id: new ObjectId(id), // Use ObjectId for MongoDB
     username,
     status: 'Hello, I am new here!',
     profilePictureUrl: 'https://via.placeholder.com/150', // Default profile picture
@@ -63,59 +64,86 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
   });
 
-  // Load user profile from localStorage on initial render
+  // Load user profile from MongoDB on initial render or login
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const storedUserId = localStorage.getItem('currentUserId');
+    if (storedUserId) {
+      fetch(`/api/users?userId=${storedUserId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && !data.message) { // Check if data is valid and not an error message
+            setUser({ ...data, _id: new ObjectId(data._id) }); // Re-hydrate ObjectId
+          } else {
+            localStorage.removeItem('currentUserId'); // Clear invalid user
+          }
+        })
+        .catch(error => {
+          console.error('Failed to fetch user profile on initial load:', error);
+          localStorage.removeItem('currentUserId');
+        });
     }
   }, []);
 
-  // Save user profile to localStorage whenever it changes
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('currentUser');
-    }
-  }, [user]);
-
-  const login = (username: string, password: string): boolean => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     const foundInitialUser = initialUsers.find(
       (u) => u.username === username && u.password === password
     );
 
     if (foundInitialUser) {
-      // Try to load existing profile from localStorage
-      const storedProfile = localStorage.getItem(`userProfile_${foundInitialUser.id}`);
-      if (storedProfile) {
-        setUser(JSON.parse(storedProfile));
-      } else {
-        // Create a new default profile if not found
-        const newUserProfile = getDefaultUserProfile(foundInitialUser.id, foundInitialUser.username);
-        setUser(newUserProfile);
-        localStorage.setItem(`userProfile_${foundInitialUser.id}`, JSON.stringify(newUserProfile));
+      // Check if user profile exists in MongoDB
+      try {
+        const res = await fetch(`/api/users?userId=${foundInitialUser.id}`);
+        let userProfile = await res.json();
+
+        if (res.status === 404) { // User not found in DB, create a new one
+          const newUserProfile = getDefaultUserProfile(foundInitialUser.id, foundInitialUser.username);
+          // Insert new user into MongoDB (this would require a POST API route, for now we'll simulate)
+          // For simplicity, we'll just set it locally and assume it will be created on first update
+          setUser(newUserProfile);
+          localStorage.setItem('currentUserId', newUserProfile._id.toHexString());
+          return true;
+        } else if (res.ok) {
+          setUser({ ...userProfile, _id: new ObjectId(userProfile._id) }); // Re-hydrate ObjectId
+          localStorage.setItem('currentUserId', userProfile._id);
+          return true;
+        }
+      } catch (error) {
+        console.error('Error during login fetching/creating profile:', error);
       }
-      return true;
     }
     setUser(null);
+    localStorage.removeItem('currentUserId');
     return false;
   };
 
   const logout = () => {
-    if (user) {
-      // Save current user's profile before logging out
-      localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(user));
-    }
     setUser(null);
+    localStorage.removeItem('currentUserId');
   };
 
-  const updateUserProfile = (updatedUser: User) => {
-    setUser(updatedUser);
-    localStorage.setItem(`userProfile_${updatedUser.id}`, JSON.stringify(updatedUser));
+  const updateUserProfile = async (updatedUser: User) => {
+    try {
+      const res = await fetch(`/api/users`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: updatedUser._id.toHexString(), updatedProfile: updatedUser }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log('Profile updated in DB:', data);
+        setUser(updatedUser); // Update local state after successful DB update
+      } else {
+        console.error('Failed to update profile in DB:', await res.json());
+      }
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+    }
   };
 
-  const isAuthenticated = user !== null; // Correctly placed
+  const isAuthenticated = user !== null;
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout, updateUserProfile }}>
