@@ -66,11 +66,12 @@ const UserProfile = () => {
           position: 'relative'
         }}>
           {editingProfileBanner && (
-            <div className="p-2 bg-dark bg-opacity-50 position-absolute bottom-0 end-0">
-              <Form.Control
+            <div className="p-2 bg-dark bg-opacity-50 position-absolute bottom-0 end-0 d-flex align-items-center">
+              <input
                 type="file"
                 accept="image/*"
-                size="sm"
+                style={{ display: 'none' }} // Hide the default file input
+                id="bannerUploadInput"
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.files && e.target.files[0]) {
                     const imageUrl = await handleFileUpload(e.target.files[0]);
@@ -78,13 +79,14 @@ const UserProfile = () => {
                   }
                 }}
               />
-              <Button variant="success" size="sm" className="mt-2 me-2" onClick={() => {
+              <label htmlFor="bannerUploadInput" className="btn btn-sm btn-info me-2">Choose File</label> {/* Custom button */}
+              <Button variant="success" size="sm" className="me-2" onClick={() => {
                 if (user && updateUserProfile) {
                   updateUserProfile({ ...user, profileCustomization: { ...user.profileCustomization, profileBannerUrl } });
                   setEditingProfileBanner(false);
                 }
-              }}>Save Banner</Button>
-              <Button variant="secondary" size="sm" className="mt-2" onClick={() => {
+              }}>Save</Button>
+              <Button variant="secondary" size="sm" onClick={() => {
                 setProfileBannerUrl(user?.profileCustomization?.profileBannerUrl || '');
                 setEditingProfileBanner(false);
               }}>Cancel</Button>
@@ -117,26 +119,35 @@ const UserProfile = () => {
           
           {/* Profile Picture Editing UI */}
           {editingProfilePicture ? (
-            <Form.Group className="mb-3">
-              <Form.Control type="file" accept="image/*" size="sm" onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files && e.target.files[0]) {
-                  const imageUrl = await handleFileUpload(e.target.files[0]);
-                  if (imageUrl) setProfilePictureUrl(imageUrl);
-                }
-              }} />
-              <Button variant="success" size="sm" className="mt-2 me-2" onClick={() => {
+            <Form.Group className="mb-3 d-flex align-items-center">
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }} // Hide the default file input
+                id="profilePictureUploadInput"
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const imageUrl = await handleFileUpload(e.target.files[0]);
+                    if (imageUrl) setProfilePictureUrl(imageUrl);
+                  }
+                }}
+              />
+              <label htmlFor="profilePictureUploadInput" className="btn btn-sm btn-info me-2">Choose File</label> {/* Custom button */}
+              <Button variant="success" size="sm" className="me-2" onClick={() => {
                 if (user && updateUserProfile) {
                   updateUserProfile({ ...user, profilePictureUrl });
                   setEditingProfilePicture(false);
                 }
               }}>Save Picture</Button>
-              <Button variant="secondary" size="sm" className="mt-2" onClick={() => {
-                setProfilePictureUrl(user?.profilePictureUrl || '');
+              <Button variant="secondary" size="sm" onClick={() => {
+                if (user) {
+                  setProfilePictureUrl(user.profilePictureUrl);
+                }
                 setEditingProfilePicture(false);
               }}>Cancel</Button>
             </Form.Group>
           ) : (
-            <Button variant="primary" size="sm" onClick={() => setEditingProfilePicture(true)}>Change Picture</Button>
+            <Button variant="primary" size="sm" onClick={() => setEditingProfilePicture(true)} disabled={user?._id === '65f2a1b3c4d5e6f7a8b9c0d3'}>Change Picture</Button>
           )}
 
           <hr />
