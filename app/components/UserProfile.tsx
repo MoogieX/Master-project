@@ -75,10 +75,33 @@ const UserProfile = () => {
             {editingProfilePicture ? (
               <Form.Group className="mt-3">
                 <Form.Control
-                  type="text"
-                  value={profilePictureUrl}
-                  onChange={(e) => setProfilePictureUrl(e.target.value)}
-                  placeholder="Enter image URL"
+                  type="file" // Changed to file input
+                  accept="image/*" // Accept only image files
+                  onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const file = e.target.files[0];
+                      const formData = new FormData();
+                      formData.append('file', file);
+
+                      try {
+                        const uploadRes = await fetch('/api/upload-image', {
+                          method: 'POST',
+                          body: formData,
+                        });
+
+                        if (uploadRes.ok) {
+                          const { imageUrl } = await uploadRes.json();
+                          setProfilePictureUrl(imageUrl); // Update local state with Cloudinary URL
+                        } else {
+                          console.error('Image upload failed:', await uploadRes.json());
+                          // Handle upload error (e.g., show a message to the user)
+                        }
+                      } catch (error) {
+                        console.error('Error during image upload:', error);
+                        // Handle network error
+                      }
+                    }
+                  }}
                 />
                 <Button variant="success" size="sm" className="mt-2 me-2" onClick={() => {
                   if (user && updateUserProfile) {
