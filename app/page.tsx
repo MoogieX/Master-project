@@ -99,5 +99,5 @@ export default function Home() {
           </section>
         </Container>
       )}
-    </div> {/* Changed from </> to </div> */}
+    </div>
   );
