@@ -15,7 +15,7 @@ const GamesList = () => {
             <div className="card-body d-flex flex-column">
               <h5 className="card-title">Voidfallen</h5>
               <p className="card-text flex-grow-1">Your Python game's web version.</p>
-              <a href="/voidfallen" className="btn btn-primary mt-auto">Play Now</a>
+              <a href="/voidfallen/index.html" className="btn btn-primary mt-auto">Play Now</a>
             </div>
           </div>
         </div>
@@ -25,7 +25,7 @@ const GamesList = () => {
             <div className="card-body d-flex flex-column">
               <h5 className="card-title">Starfallen</h5>
               <p className="card-text flex-grow-1">Your sci-fi RPG.</p>
-              <a href="/starfallen" className="btn btn-primary mt-auto">Play Now</a>
+              <a href="/starfallen/index.html" className="btn btn-primary mt-auto">Play Now</a>
             </div>
           </div>
         </div>
