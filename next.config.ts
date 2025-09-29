@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    turbopack: {
+      // Explicitly set the root directory for Turbopack
+      // This should be the absolute path to your game-hub project
+      // Replace with your actual path if different
+      root: "C:\\Users\\munki\\Documents\\masterproject\\game-hub",
+    },
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
