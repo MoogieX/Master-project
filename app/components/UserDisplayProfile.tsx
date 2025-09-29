@@ -65,24 +65,42 @@ const UserDisplayProfile: React.FC<UserDisplayProfileProps> = ({ userId, onClose
   }
 
   return (
-    <Container className="mt-5">
-      <Card>
-        <Card.Header as="h5">Profile of {userProfile.username}</Card.Header>
-        <Card.Body>
-          <div className="text-center mb-4">
-            <img
-              src={userProfile.profilePictureUrl}
-              alt="Profile"
-              className="rounded-circle"
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-            />
-          </div>
-          <Card.Text><strong>Status:</strong> {userProfile.status}</Card.Text>
-          <Card.Text><strong>School:</strong> {userProfile.school}</Card.Text>
-          <Button variant="secondary" onClick={onClose}>Close</Button>
-        </Card.Body>
-      </Card>
-    </Container>
+    <Card style={{ border: 'none', backgroundColor: 'var(--background-secondary)' }}>
+      {/* Profile Banner */}
+      <div style={{
+        height: '120px',
+        backgroundColor: 'var(--background-accent)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundImage: userProfile.profileBannerUrl ? `url(${userProfile.profileBannerUrl})` : 'none'
+      }}></div>
+
+      <Card.Body style={{ paddingTop: '60px', position: 'relative' }}>
+        {/* Profile Picture */}
+        <div style={{
+          position: 'absolute',
+          top: '-60px',
+          left: '20px',
+          border: '4px solid var(--background-secondary)',
+          borderRadius: '50%',
+          width: '120px',
+          height: '120px'
+        }}>
+          <img
+            src={userProfile.profilePictureUrl || '/default-avatar.png'}
+            alt="Profile"
+            className="rounded-circle"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </div>
+
+        <Card.Title as="h4" style={{ marginTop: '15px', fontWeight: '600' }}>{userProfile.username}</Card.Title>
+        <hr style={{ borderColor: 'var(--background-accent)' }} />
+        <Card.Text><strong>Status:</strong> {userProfile.status}</Card.Text>
+        <Card.Text><strong>School:</strong> {userProfile.school}</Card.Text>
+        <Button variant="secondary" onClick={onClose} className="mt-3">Close</Button>
+      </Card.Body>
+    </Card>
   );
 };
 
