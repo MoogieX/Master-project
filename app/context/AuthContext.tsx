@@ -23,6 +23,7 @@ interface User {
   username: string;
   password?: string; // Password is not exposed after login
   status: string;
+  profilePictureUrl: string; // Added profile picture URL
   savedGames: SavedGame[];
   profileCustomization: ProfileCustomization;
 }
@@ -54,9 +55,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     id,
     username,
     status: 'Hello, I am new here!',
+    profilePictureUrl: 'https://via.placeholder.com/150', // Default profile picture
     savedGames: [],
     profileCustomization: {
       textColor: '#212529', // Default light mode text color
+      backgroundColor: '#ffffff', // Default light mode background color
     },
   });
 

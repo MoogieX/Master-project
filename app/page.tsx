@@ -5,8 +5,6 @@ import Link from 'next/link'; // Import Link from next/link
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
-import ThemeToggle from './components/ThemeToggle'; // Import ThemeToggle
-import TextColorPicker from './components/TextColorPicker'; // Import TextColorPicker
 import UserProfile from './components/UserProfile'; // Import UserProfile
 
 export default function Home() {
@@ -38,8 +36,6 @@ export default function Home() {
                 Signed in as: <strong>{user?.username}</strong>
               </Navbar.Text>
               <Nav.Link onClick={logout}>Logout</Nav.Link>
-              <ThemeToggle /> {/* Added ThemeToggle component */}
-              <TextColorPicker /> {/* Added TextColorPicker component */}
             </Nav>
           </Navbar.Collapse>
         </Container>
