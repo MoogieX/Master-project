@@ -20,7 +20,7 @@ export default function Home() {
       <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
         <Container>
           <Link href="/" passHref>
-            <Navbar.Brand as="a">Game Hub</Navbar.Brand>
+            <Navbar.Brand>Game Hub</Navbar.Brand>
           </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
