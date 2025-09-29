@@ -62,7 +62,7 @@ const UserProfile = () => {
           backgroundColor: 'var(--background-accent)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundImage: profileBannerUrl ? `url(${profileBannerUrl})` : 'none',
+          backgroundImage: profileBannerUrl ? `url(${profileBannerUrl})` : (user?.profileCustomization?.profileGradient || 'none'), // Use banner or gradient
           position: 'relative'
         }}>
           {editingProfileBanner && (
@@ -180,11 +180,23 @@ const UserProfile = () => {
           <hr />
 
           <Card.Title className="mt-4">Profile Customization:</Card.Title>
-          <div className="d-flex align-items-center mb-3"><TextColorPicker /></div>
-          <div className="d-flex align-items-center mb-3"><BackgroundColorPicker /></div>
-          <div className="d-flex align-items-center mb-3"><ThemeToggle /></div>
-          <div className="d-flex align-items-center mb-3"><ChatBubbleColorPicker /></div>
-          <div className="d-flex align-items-center mb-3"><GradientPicker /></div>
+          <div className="row mb-3">
+            <div className="col-md-6 mb-3">
+              <TextColorPicker />
+            </div>
+            <div className="col-md-6 mb-3">
+              <BackgroundColorPicker />
+            </div>
+            <div className="col-md-6 mb-3">
+              <ChatBubbleColorPicker />
+            </div>
+            <div className="col-md-6 mb-3">
+              <ThemeToggle />
+            </div>
+            <div className="col-12 mb-3"> {/* Gradient picker takes full width */}
+              <GradientPicker />
+            </div>
+          </div>
 
           <hr />
 
