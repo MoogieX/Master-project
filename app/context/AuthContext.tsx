@@ -45,12 +45,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  const isAuthenticated = user !== null;
+
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  );};
 
 // Custom hook to use the auth context
 export const useAuth = () => {
