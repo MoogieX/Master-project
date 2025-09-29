@@ -24,8 +24,8 @@ const Login = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-      <Card style={{ width: '30rem' }}>
+    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: 'calc(100vh - 56px)' }}> {/* Adjusted minHeight */}
+      <Card style={{ width: '30rem', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}> {/* Added boxShadow */}
         <Card.Body>
           <h2 className="text-center mb-4">Game Hub Login</h2>
           {error && <Alert variant="danger">{error}</Alert>}
