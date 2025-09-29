@@ -50,23 +50,25 @@ export default function Home() {
 
           <section id="games" className="my-5">
             <h2>Your Games</h2>
-            <p>List your web-based games here.</p>
+            <p>Explore your collection of web-based games.</p>
             <div className="row">
               <div className="col-md-4 mb-4">
-                <div className="card">
-                  <div className="card-body">
+                <div className="card h-100 shadow-sm"> {/* Added h-100 and shadow-sm */}
+                  <img src="/voidfallen.jpg" className="card-img-top" alt="Voidfallen" style={{ height: '180px', objectFit: 'cover' }} /> {/* Added image */}
+                  <div className="card-body d-flex flex-column"> {/* Added d-flex flex-column */}
                     <h5 className="card-title">Voidfallen</h5>
-                    <p className="card-text">Your Python game's web version.</p>
-                    <a href="/voidfallen" className="btn btn-primary">Play Now</a>
+                    <p className="card-text flex-grow-1">Your Python game's web version.</p> {/* Added flex-grow-1 */}
+                    <a href="/voidfallen" className="btn btn-primary mt-auto">Play Now</a> {/* Added mt-auto */}
                   </div>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
-                <div className="card">
-                  <div className="card-body">
+                <div className="card h-100 shadow-sm"> {/* Added h-100 and shadow-sm */}
+                  <img src="/textgame.jpg" className="card-img-top" alt="TEXTGAME" style={{ height: '180px', objectFit: 'cover' }} /> {/* Added image */}
+                  <div className="card-body d-flex flex-column"> {/* Added d-flex flex-column */}
                     <h5 className="card-title">TEXTGAME</h5>
-                    <p className="card-text">Your sci-fi RPG.</p>
-                    <a href="/textgame" className="btn btn-primary">Play Now</a>
+                    <p className="card-text flex-grow-1">Your sci-fi RPG.</p> {/* Added flex-grow-1 */}
+                    <a href="/textgame" className="btn btn-primary mt-auto">Play Now</a> {/* Added mt-auto */}
                   </div>
                 </div>
               </div>
@@ -78,11 +80,12 @@ export default function Home() {
             <p>Manage your other mini-projects here.</p>
             <div className="row">
               <div className="col-md-4 mb-4">
-                <div className="card">
-                  <div className="card-body">
+                <div className="card h-100 shadow-sm"> {/* Added h-100 and shadow-sm */}
+                  <img src="/thecheat.jpg" className="card-img-top" alt="The Cheat" style={{ height: '180px', objectFit: 'cover' }} /> {/* Added image */}
+                  <div className="card-body d-flex flex-column"> {/* Added d-flex flex-column */}
                     <h5 className="card-title">The Cheat</h5>
-                    <p className="card-text">Your school work helper.</p>
-                    <a href="/the-cheat" className="btn btn-primary">View Project</a>
+                    <p className="card-text flex-grow-1">Your school work helper.</p> {/* Added flex-grow-1 */}
+                    <a href="/the-cheat" className="btn btn-primary mt-auto">View Project</a> {/* Added mt-auto */}
                   </div>
                 </div>
               </div>
