@@ -10,6 +10,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Sender ID, recipient ID, and content are required' }, { status: 400 });
     }
 
+    // Basic chat moderation: keyword filtering
+    const forbiddenWords = ['badword1', 'badword2', 'hate', 'swear']; // Example list
+    const lowerCaseContent = content.toLowerCase();
+
+    for (const word of forbiddenWords) {
+      if (lowerCaseContent.includes(word)) {
+        return NextResponse.json({ message: `Message contains forbidden word: "${word}"` }, { status: 400 });
+      }
+    }
+
     const client = await clientPromise;
     const db = client.db('gamehub'); // Replace 'gamehub' with your database name
     const messagesCollection = db.collection('messages'); // Collection for messages
