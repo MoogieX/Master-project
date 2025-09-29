@@ -1,103 +1,88 @@
-import Image from "next/image";
+"use client";
+
+import { Container, Navbar, Nav } from 'react-bootstrap';
+import { useAuth } from './context/AuthContext';
+import Login from './components/Login';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { isAuthenticated, user, logout } = useAuth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return (
+    <>
+      <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+        <Container>
+          <Navbar.Brand href="#home">Game Hub</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            <Nav className="me-auto">
+              <Nav.Link href="#games">Games</Nav.Link>
+              <Nav.Link href="#projects">Projects</Nav.Link>
+              <Nav.Link href="#messaging">Messaging</Nav.Link>
+            </Nav>
+            <Nav>
+              <Navbar.Text className="me-3">
+                Signed in as: <strong>{user?.username}</strong>
+              </Navbar.Text>
+              <Nav.Link onClick={logout}>Logout</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Container className="mt-5 pt-5">
+        <h1>Welcome to your Master Project Hub!</h1>
+        <p>This is where you can manage and launch your web-based games and mini-projects.</p>
+
+        <section id="games" className="my-5">
+          <h2>Your Games</h2>
+          <p>List your web-based games here.</p>
+          <div className="row">
+            <div className="col-md-4 mb-4">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Voidfallen</h5>
+                  <p className="card-text">Your Python game's web version.</p>
+                  <a href="/voidfallen" className="btn btn-primary">Play Now</a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">TEXTGAME</h5>
+                  <p className="card-text">Your sci-fi RPG.</p>
+                  <a href="/textgame" className="btn btn-primary">Play Now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" className="my-5">
+          <h2>Your Mini-Projects</h2>
+          <p>Manage your other mini-projects here.</p>
+          <div className="row">
+            <div className="col-md-4 mb-4">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">The Cheat</h5>
+                  <p className="card-text">Your school work helper.</p>
+                  <a href="/the-cheat" className="btn btn-primary">View Project</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="messaging" className="my-5">
+          <h2>Messaging</h2>
+          <p>Future messaging features will appear here.</p>
+        </section>
+      </Container>
+    </>
   );
 }
