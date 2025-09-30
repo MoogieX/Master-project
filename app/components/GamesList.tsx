@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react'; // Import useState
 import { Container, Card, Button, Alert } from 'react-bootstrap'; // Import Alert
 import { useAuth } from '../context/AuthContext'; // Import useAuth
