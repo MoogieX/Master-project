@@ -4,10 +4,12 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 
 // Define the shape of a saved game
 interface SavedGame {
-  id: string;
-  name: string;
-  timestamp: string;
-  data: any; // This will hold the actual game state
+  _id?: string; // MongoDB's ID for the save document
+  gameId: string; // Identifier for the game (e.g., 'voidfallen', 'starfallen')
+  userId: string; // ID of the user who owns the save
+  saveName: string; // User-friendly name for the save (e.g., 'Chapter 3', 'Level 5')
+  timestamp: string; // When the save was created/updated
+  data: any; // This will hold the actual game state (JSON object)
 }
 
 // Define the shape of user profile customization
