@@ -13,13 +13,33 @@ const UserProfile = () => {
   const { user, updateUserProfile } = useAuth();
   const [status, setStatus] = useState('');
   const [editingStatus, setEditingStatus] = useState(false);
-  const [school, setSchool] = useState(user?.school || '');
+  const [school, setSchool] = useState(user?.school || ''); // State for school
   const [editingSchool, setEditingSchool] = useState(false);
   const [profilePictureUrl, setProfilePictureUrl] = useState(user?.profilePictureUrl || '');
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [profileBannerUrl, setProfileBannerUrl] = useState(user?.profileCustomization?.profileBannerUrl || '');
   const [editingProfileBanner, setEditingProfileBanner] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState(false); // State to track image loading errors
+  const [gameSaves, setGameSaves] = useState<SavedGame[]>([]); // State to store game saves
+
+  // Fetch game saves when user changes or component mounts
+  useEffect(() => {
+    const fetchGameSaves = async () => {
+      if (!user?._id) return;
+      try {
+        const res = await fetch(`/api/gamesaves?userId=${user._id}`);
+        if (res.ok) {
+          const data: SavedGame[] = await res.json();
+          setGameSaves(data);
+        } else {
+          console.error('Failed to fetch game saves:', await res.json());
+        }
+      } catch (error) {
+        console.error('Error fetching game saves:', error);
+      }
+    };
+    fetchGameSaves();
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -212,8 +232,15 @@ const UserProfile = () => {
           <hr />
 
           <Card.Title className="mt-4">Saved Games:</Card.Title>
-          {user.savedGames.length > 0 ? (
-            <ListGroup>{user.savedGames.map((game) => (<ListGroup.Item key={game.id}>{game.name} - Saved on: {new Date(game.timestamp).toLocaleString()}</ListGroup.Item>))}</ListGroup>
+          {gameSaves.length > 0 ? (
+            <ListGroup>
+              {gameSaves.map((save) => (
+                <ListGroup.Item key={save._id}>
+                  <strong>{save.saveName}</strong> for {save.gameId} - Saved on: {new Date(save.timestamp).toLocaleString()}
+                  {/* Add "Load Game" and "Delete Save" buttons here later */}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
           ) : (
             <Card.Text>No saved games yet.</Card.Text>
           )}
