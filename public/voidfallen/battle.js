@@ -204,7 +204,7 @@ class AzraelBattle extends Battle {
     }
 
     run() {
-        this.game.displayMessage(`You face the abyssal demon, Azrael. There is no escape.`);
+        this.game.displayMessage(`You face the archangel Azrael...`);
         this._startTurn();
     }
 
@@ -288,11 +288,11 @@ class AzraelBattle extends Battle {
 
     _handleTalk() {
         const loreMessages = [
-            "Azrael's eyes glow faintly, 'You seek answers where only oblivion awaits.'",
-            "A chilling whisper emanates from Azrael, 'Your struggles are but a fleeting dance.'",
-            "Azrael's form shifts, 'The Void hungers, and you are but a morsel.'",
-            "'Do you truly believe you can comprehend what you face?' Azrael's voice echoes.",
-            "'Your world is but a fragile dream,' Azrael murmurs, 'soon to be undone.'"
+            "'Your actions lead here...'",
+            "'To a world where you face your actions'",
+            "'This void...'",
+            "'Is much like your heart...'",
+            "'Tell the devil I said hi.'"
         ];
         const message = loreMessages[Math.floor(Math.random() * loreMessages.length)];
         this.game.displayMessage(message);
