@@ -1,7 +1,6 @@
 const gameOutput = document.getElementById('game-output');
 const userInput = document.getElementById('user-input');
 
-// Audio Elements
 const bgMusic = document.getElementById('bg-music');
 const sfx = document.getElementById('sfx');
 
@@ -14,15 +13,13 @@ function pauseMusic() {
 }
 
 function playSoundEffect() {
-    sfx.currentTime = 0; // Rewind to start for quick playback
+    sfx.currentTime = 0;
     sfx.play().catch(error => console.log("SFX autoplay prevented:", error));
 }
 
-// Game State Variables
 let battleActive = false;
 let currentEnemy = null;
 
-// Player Stats
 let player = {
     health: 100,
     maxHealth: 100,
@@ -31,10 +28,8 @@ let player = {
     currentLocation: "bridge" // Player starts on the bridge
 };
 
-// Game Settings
 const randomEncounterChance = 0.3; // 30% chance of a random encounter after moving
 
-// Game Locations
 const locations = {
     "bridge": {
         name: "Starship Bridge",
@@ -84,18 +79,16 @@ const locations = {
     }
 };
 
-// Function to check for random encounters
 function checkRandomEncounter() {
     if (Math.random() < randomEncounterChance) {
         const enemyKeys = Object.keys(enemies);
         const randomEnemyKey = enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
         startBattle(enemies[randomEnemyKey]);
-        return true; // Encounter happened
+        return true;
     }
-    return false; // No encounter
+    return false;
 }
 
-// Save Game Function
 async function saveGame() {
     "bridge": {
         name: "Starship Bridge",
@@ -145,7 +138,6 @@ async function saveGame() {
     }
 };
 
-// Save Game Function
 async function saveGame() {
     try {
         const response = await fetch('/save', {
@@ -158,30 +150,29 @@ async function saveGame() {
         const message = await response.text();
         printToOutput(message);
     } catch (error) {
-        console.error('Error; corrupted data:', error);
-        printToOutput('Failed to save to memory...');
+        console.error('ERROR; CORRUPTED DATA:', error);
+        printToOutput('FAILED TO SAVE MEMORY...');
     }
 }
 
-// Load Game Function
 async function loadGame() {
     try {
         const response = await fetch('/load');
         if (response.ok) {
             const loadedPlayer = await response.json();
-            player = { ...player, ...loadedPlayer }; // Merge loaded data into current player
-            printToOutput('Game loaded successfully!');
-            displayLocation(); // Refresh location display after loading
+            player = { ...player, ...loadedPlayer };
+            printToOutput('DATA LOADING...');
+            displayLocation(); 
             printToOutput(`Your health: ${player.health}/${player.maxHealth}`);
         } else if (response.status === 404) {
-            printToOutput('No saved game found to load.');
+            printToOutput('ERROR; NO RECORDS SAVED.');
         } else {
             const errorText = await response.text();
             throw new Error(errorText);
         }
     } catch (error) {
-        console.error('Error loading game:', error);
-        printToOutput('Failed to load game.');
+        console.error('ERROR LOADING DATA:', error);
+        printToOutput('FAILED TO LOAD DATA.');
     }
 }
     "bridge": {
@@ -232,7 +223,6 @@ async function loadGame() {
     }
 };
 
-// Enemy Templates (we can expand this later)
 const enemies = {
     "scout_drone": {
         name: "Scout Drone",
@@ -270,7 +260,7 @@ const enemies = {
 
 function printToOutput(message) {
     gameOutput.innerHTML += message + '\n';
-    gameOutput.scrollTop = gameOutput.scrollHeight; // Auto-scroll to bottom
+    gameOutput.scrollTop = gameOutput.scrollHeight;
 }
 
 function handleInput(event) {
@@ -291,14 +281,12 @@ function processCommand(command) {
 
     const currentLocation = locations[player.currentLocation];
 
-    // Check for movement commands first
     const direction = command.toLowerCase();
     if (currentLocation.exits[direction]) {
         player.currentLocation = currentLocation.exits[direction];
         displayLocation();
-        // After moving, check for a random encounter
         if (checkRandomEncounter()) {
-            return; // If an encounter starts, don't process further commands
+            return; 
         }
         return;
     }
@@ -306,7 +294,7 @@ function processCommand(command) {
     switch (command.toLowerCase()) {
         case 'look':
             displayLocation();
-            printToOutput(`Your current health: ${player.health}/${player.maxHealth}`);
+            printToOutput(`SYSTEM STATUS: ${player.health}/${player.maxHealth}`);
             break;
         case 'help':
             printToOutput("Available commands: look, attack [enemy_name], [directions like n, s, e, w, ne, nw, se, sw], music on/off, save, load.");
@@ -345,7 +333,7 @@ function displayLocation() {
 
 function startBattle(enemy) {
     battleActive = true;
-    currentEnemy = { ...enemy }; // Create a copy so we don't modify the template
+    currentEnemy = { ...enemy }; 
     printToOutput(`\n--- BATTLE STARTED ---`);
     printToOutput(`A ${currentEnemy.name} appears! ${currentEnemy.description}`);
     printToOutput(`Your health: ${player.health}/${player.maxHealth}`);
@@ -356,8 +344,7 @@ function startBattle(enemy) {
 function handleBattleCommand(command) {
     switch (command.toLowerCase()) {
         case 'attack':
-            playSoundEffect(); // Play sound effect on attack
-            // Player attacks enemy
+            playSoundEffect();
             let playerDamage = Math.max(0, player.attack - currentEnemy.defense);
             currentEnemy.health -= playerDamage;
             printToOutput(`You attack the ${currentEnemy.name} for ${playerDamage} damage!`);
@@ -368,7 +355,6 @@ function handleBattleCommand(command) {
                 return;
             }
 
-            // Enemy attacks player
             let enemyDamage = Math.max(0, currentEnemy.attack - player.defense);
             player.health -= enemyDamage;
             printToOutput(`${currentEnemy.name} attacks you for ${enemyDamage} damage!`);
@@ -385,13 +371,11 @@ function handleBattleCommand(command) {
             break;
         case 'run':
             printToOutput("You attempt to flee...");
-            // Simple 50% chance to run away
-            if (Math.random() > 0.5) {
+            if (Math.random() > 0.2) {
                 printToOutput("You successfully escaped!");
                 endBattle(true);
             } else {
                 printToOutput("You failed to escape!");
-                // Enemy gets a free hit
                 let enemyDamage = Math.max(0, currentEnemy.attack - player.defense);
                 player.health -= enemyDamage;
                 printToOutput(`${currentEnemy.name} attacks you for ${enemyDamage} damage as you try to flee!`);
@@ -414,7 +398,7 @@ function handleBattleCommand(command) {
 function endBattle(playerWon) {
     battleActive = false;
     currentEnemy = null;
-    printToOutput(`--- BATTLE ENDED ---`);
+    printToOutput(`--- END OF BATTLE ---`);
     if (playerWon) {
         printToOutput("You stand at the body of your enemy, as the victor");
     } else {
@@ -430,8 +414,8 @@ function endBattle(playerWon) {
 
 // Initial game setup
 printToOutput("You awaken from cryo-sleep. Your mission: Find out what happened on this ship.");
-displayLocation(); // Display the initial location
-playMusic(); // Start background music
+displayLocation();
+playMusic();
 printToOutput("ERROR; PLEASE TRY SOMETHING ELSE.");
 
 userInput.addEventListener('keydown', handleInput);
