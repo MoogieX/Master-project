@@ -6,7 +6,7 @@ const bgMusic = document.getElementById('bg-music');
 const sfx = document.getElementById('sfx');
 
 function playMusic() {
-    bgMusic.play().catch(error => console.log("Music autoplay prevented:", error));
+    bgMusic.play().catch(error => console.log("ERROR 404 NOT FOUND:", error));
 }
 
 function pauseMusic() {
@@ -38,7 +38,7 @@ const randomEncounterChance = 0.3; // 30% chance of a random encounter after mov
 const locations = {
     "bridge": {
         name: "Starship Bridge",
-        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a swirling nebula. Consoles hum softly around you. Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay).",
+        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a complex starsystem. Over the control pannels, you can see the stars outside... Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay).",
         exits: {
             n: "engineering",
             e: "crew_quarters",
@@ -48,21 +48,21 @@ const locations = {
     },
     "engineering": {
         name: "Engineering Deck",
-        description: "The heart of the ship's propulsion system. Sparks occasionally fly from exposed conduits. The air smells of ozone and coolant. Exits: south (Bridge).",
+        description: "The heart of the ship, where a nuclear reactor stands tall with exposed circuitry scattered around the room. Exits: south (Bridge).",
         exits: {
             s: "bridge"
         }
     },
     "crew_quarters": {
         name: "Crew Quarters",
-        description: "Rows of bunks and personal lockers. A few holographic displays flicker with family photos. It's quiet here. Exits: west (Bridge).",
+        description: "A long hallway of personal chambers, the name plates faded but it feels like something was lost here... Exits: west (Bridge).",
         exits: {
             w: "bridge"
         }
     },
     "cargo_bay": {
         name: "Cargo Bay",
-        description: "Large crates are stacked high, secured with magnetic clamps. The heavy door to the shuttle bay is to the south. Exits: north (Bridge), south (Shuttle Bay).",
+        description: "Rows of storage crates and containers line shelves, though there isn't much of note here. There is the door to the shuttle bay to the south. Exits: north (Bridge), south (Shuttle Bay).",
         exits: {
             n: "bridge",
             s: "shuttle_bay"
@@ -70,14 +70,14 @@ const locations = {
     },
     "medbay": {
         name: "Medbay",
-        description: "A sterile environment with diagnostic beds and medical equipment. A faint antiseptic smell hangs in the air. Exits: east (Bridge).",
+        description: "White walls and tile floors, empty hospital beds stand in line on the walls, but no one is here... Exits: east (Bridge).",
         exits: {
             e: "bridge"
         }
     },
     "shuttle_bay": {
         name: "Shuttle Bay",
-        description: "The main shuttle 'Pioneer' sits ready for launch. The bay doors lead out into space. Exits: north (Cargo Bay).",
+        description: "The main shuttle 'Pioneer' sits ready for launch, although it probably wouldn't be smart to launch just yet. Exits: north (Cargo Bay).",
         exits: {
             n: "cargo_bay"
         }
@@ -99,7 +99,7 @@ function checkRandomEncounter() {
 async function saveGame() {
     "bridge": {
         name: "Starship Bridge",
-        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a swirling nebula. Consoles hum softly around you. Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay).",
+        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a complex starsystem. Over the control pannels, you can see the stars outside... Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay)",
         exits: {
             n: "engineering",
             e: "crew_quarters",
@@ -109,21 +109,21 @@ async function saveGame() {
     },
     "engineering": {
         name: "Engineering Deck",
-        description: "The heart of the ship's propulsion system. Sparks occasionally fly from exposed conduits. The air smells of ozone and coolant. Exits: south (Bridge).",
+        description: "The heart of the ship, where a nuclear reactor stands tall with exposed circuitry scattered around the room. Exits: south (Bridge).",
         exits: {
             s: "bridge"
         }
     },
     "crew_quarters": {
         name: "Crew Quarters",
-        description: "Rows of bunks and personal lockers. A few holographic displays flicker with family photos. It's quiet here. Exits: west (Bridge).",
+        description: "A long hallway of personal chambers, the name plates faded but it feels like something was lost here... Exits: west (Bridge).",
         exits: {
             w: "bridge"
         }
     },
     "cargo_bay": {
         name: "Cargo Bay",
-        description: "Large crates are stacked high, secured with magnetic clamps. The heavy door to the shuttle bay is to the south. Exits: north (Bridge), south (Shuttle Bay).",
+        description: "Rows of storage crates and containers line shelves, though there isn't much of note here. There is the door to the shuttle bay to the south. Exits: north (Bridge), south (Shuttle Bay).",
         exits: {
             n: "bridge",
             s: "shuttle_bay"
@@ -131,14 +131,14 @@ async function saveGame() {
     },
     "medbay": {
         name: "Medbay",
-        description: "A sterile environment with diagnostic beds and medical equipment. A faint antiseptic smell hangs in the air. Exits: east (Bridge).",
+        description: "White walls and tile floors, empty hospital beds stand in line on the walls, but no one is here... Exits: east (Bridge).",
         exits: {
             e: "bridge"
         }
     },
     "shuttle_bay": {
         name: "Shuttle Bay",
-        description: "The main shuttle 'Pioneer' sits ready for launch. The bay doors lead out into space. Exits: north (Cargo Bay).",
+        description: "The main shuttle 'Pioneer' sits ready for launch, although it probably wouldn't be smart to launch just yet. Exits: north (Cargo Bay).",
         exits: {
             n: "cargo_bay"
         }
@@ -158,8 +158,8 @@ async function saveGame() {
         const message = await response.text();
         printToOutput(message);
     } catch (error) {
-        console.error('Error saving game:', error);
-        printToOutput('Failed to save game.');
+        console.error('Error; corrupted data:', error);
+        printToOutput('Failed to save to memory...');
     }
 }
 
@@ -186,7 +186,7 @@ async function loadGame() {
 }
     "bridge": {
         name: "Starship Bridge",
-        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a swirling nebula. Consoles hum softly around you. Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay).",
+        description: "You are on the command bridge of the starship 'Voyager'. The main viewscreen shows a complex starsystem. Over the control pannels, you can see the stars outside... Exits: north (Engineering), east (Crew Quarters), south (Cargo Bay), west (Medbay)",
         exits: {
             n: "engineering",
             e: "crew_quarters",
@@ -196,21 +196,21 @@ async function loadGame() {
     },
     "engineering": {
         name: "Engineering Deck",
-        description: "The heart of the ship's propulsion system. Sparks occasionally fly from exposed conduits. The air smells of ozone and coolant. Exits: south (Bridge).",
+        description: "The heart of the ship, where a nuclear reactor stands tall with exposed circuitry scattered around the room. Exits: south (Bridge).",
         exits: {
             s: "bridge"
         }
     },
     "crew_quarters": {
         name: "Crew Quarters",
-        description: "Rows of bunks and personal lockers. A few holographic displays flicker with family photos. It's quiet here. Exits: west (Bridge).",
+        description: "A long hallway of personal chambers, the name plates faded but it feels like something was lost here... Exits: west (Bridge).",
         exits: {
             w: "bridge"
         }
     },
     "cargo_bay": {
         name: "Cargo Bay",
-        description: "Large crates are stacked high, secured with magnetic clamps. The heavy door to the shuttle bay is to the south. Exits: north (Bridge), south (Shuttle Bay).",
+        description: "Rows of storage crates and containers line shelves, though there isn't much of note here. There is the door to the shuttle bay to the south. Exits: north (Bridge), south (Shuttle Bay).",
         exits: {
             n: "bridge",
             s: "shuttle_bay"
@@ -218,14 +218,14 @@ async function loadGame() {
     },
     "medbay": {
         name: "Medbay",
-        description: "A sterile environment with diagnostic beds and medical equipment. A faint antiseptic smell hangs in the air. Exits: east (Bridge).",
+        description: "White walls and tile floors, empty hospital beds stand in line on the walls, but no one is here... Exits: east (Bridge).",
         exits: {
             e: "bridge"
         }
     },
     "shuttle_bay": {
         name: "Shuttle Bay",
-        description: "The main shuttle 'Pioneer' sits ready for launch. The bay doors lead out into space. Exits: north (Cargo Bay).",
+        description: "The main shuttle 'Pioneer' sits ready for launch, although it probably wouldn't be smart to launch just yet. Exits: north (Cargo Bay).",
         exits: {
             n: "cargo_bay"
         }
@@ -240,31 +240,31 @@ const enemies = {
         maxHealth: 30,
         attack: 10,
         defense: 2,
-        description: "A small, agile reconnaissance drone."
+        description: "A small drone, built for flight and exploration."
     },
-    "combat_bot": {
-        name: "Combat Bot",
+    "combat_android": {
+        name: "Combat Android",
         health: 60,
         maxHealth: 60,
         attack: 20,
         defense: 10,
-        description: "A heavily armored combat unit."
+        description: "An android much like yourself, although following some unknown corporation"
     },
-    "alien_scavenger": {
-        name: "Alien Scavenger",
+    "scavenger": {
+        name: "Scavenger",
         health: 40,
         maxHealth: 40,
         attack: 12,
         defense: 3,
-        description: "A cunning alien, looking for easy prey."
+        description: "A sharp-sighted mechanical beast, looking for organic and metalic parts"
     },
-    "mutated_creature": {
-        name: "Mutated Creature",
+    "broken_android": {
+        name: "Broken android",
         health: 80,
         maxHealth: 80,
         attack: 25,
         defense: 8,
-        description: "A grotesque beast, mutated by cosmic radiation."
+        description: "A being of broken wires and circuits, violent and confused"
     }
 };
 
@@ -279,7 +279,6 @@ function handleInput(event) {
         printToOutput(`> ${command}`);
         userInput.value = ''; // Clear input
         
-        // Process command here
         processCommand(command);
     }
 }
@@ -310,7 +309,7 @@ function processCommand(command) {
             printToOutput(`Your current health: ${player.health}/${player.maxHealth}`);
             break;
         case 'help':
-            printToOutput("Available commands: look, help, fight [enemy_type], [directions like n, s, e, w, ne, nw, se, sw], music on/off, save, load.");
+            printToOutput("Available commands: look, attack [enemy_name], [directions like n, s, e, w, ne, nw, se, sw], music on/off, save, load.");
             break;
         case 'music on':
             playMusic();
@@ -329,8 +328,8 @@ function processCommand(command) {
         case 'fight scout_drone':
             startBattle(enemies.scout_drone);
             break;
-        case 'fight combat_bot':
-            startBattle(enemies.combat_bot);
+        case 'fight combat_android':
+            startBattle(enemies.combat_android);
             break;
         default:
             printToOutput(`Unknown command: '${command}'. Type 'help' for a list of commands.`);
@@ -417,9 +416,9 @@ function endBattle(playerWon) {
     currentEnemy = null;
     printToOutput(`--- BATTLE ENDED ---`);
     if (playerWon) {
-        printToOutput("You are victorious!");
+        printToOutput("You stand at the body of your enemy, as the victor");
     } else {
-        printToOutput("You were defeated.");
+        printToOutput("You fall, electricity cut from your circuits.");
     }
     printToOutput("You can now issue regular commands again. Type 'help' for options.");
     // Reset player health for now, or implement proper game over/respawn
@@ -430,10 +429,9 @@ function endBattle(playerWon) {
 }
 
 // Initial game setup
-printToOutput("Welcome, Captain, to the Sci-Fi RPG!");
-printToOutput("You awaken from cryo-sleep. Your mission: explore the uncharted galaxy.");
+printToOutput("You awaken from cryo-sleep. Your mission: Find out what happened on this ship.");
 displayLocation(); // Display the initial location
 playMusic(); // Start background music
-printToOutput("Type 'help' for available commands.");
+printToOutput("ERROR; PLEASE TRY SOMETHING ELSE.");
 
 userInput.addEventListener('keydown', handleInput);
